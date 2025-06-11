@@ -1,0 +1,6 @@
+pandas
+streamlit
+altair
+toml
+psycopg2-binary
+st-supabase-connection
