@@ -6,26 +6,41 @@ import streamlit as st
 # --- Page Configuration ---
 # This should be the first Streamlit command in your app.
 st.set_page_config(
-    page_title="OSRS Clan Dashboard",
-    page_icon="⚔️",
+    page_title="AU OSRS Dashboard",
+    page_icon="🇦🇺",
     layout="wide"
 )
 
 # --- Main "Home" Page ---
-st.title("⚔️ OSRS Clan Reporter Dashboard")
-st.markdown("Welcome to the clan's activity and achievement dashboard. Use the sidebar navigation on the left to view specific reports.")
-st.info("💡 **Tip:** This dashboard connects directly to the clan's pre-processed database, so the data is always fast and up-to-date.", icon="💡")
-
+st.title("🇦🇺 AU OSRS Clan Dashboard 🇦🇺")
+st.info("**This is a preview**, some data maybe incorrect or fail to display. This project is a work in progress!", icon="💡")
+st.markdown("Welcome to the official activity and achievement dashboard for the AU OSRS clan.")
 st.markdown("---")
 
-st.header("How This Works")
+# Use columns to center and constrain the image width
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    st.image("AU_OSRS_Flag.png", use_container_width=True)
+
+
+st.header("Dashboard Features")
 st.markdown("""
-This dashboard is the front-end viewer for a complete ETL (Extract, Transform, Load) pipeline.
+This dashboard provides a comprehensive look at our clan's activities, powered by data directly from our Discord server. Here's what you can explore:
 
-1.  **Extract & Parse**: A backend process fetches data from Discord, parses it, and stores it in a structured format.
-2.  **Transform**: A daily script reads the parsed data and pre-calculates all the statistics, leaderboards, and summaries you see on these pages. This makes the dashboard extremely fast, as it doesn't need to perform heavy calculations.
-3.  **Load & View**: The final summary tables are loaded into a production database, which this Streamlit app reads from.
+- **💰 Valuable Drops:** Track the biggest earners and see who's getting lucky.
+- **💀 PvP Leaderboards:** View the top killers and who's been taking a dirt nap in the wilderness.
+- **📜 Clan Collection Log:** See our clan's progress on completing the collection log.
+- **...and much more!**
 
-- **Navigation**: Use the menu on the left to switch between different reports.
-- **Data**: The data is cached for performance but is refreshed every 10 minutes to ensure you're seeing the latest information from the last pipeline run.
+Use the sidebar on the left to navigate through the different report pages. The data is currently updated weekly
 """)
+
+st.header("Clan Links")
+st.markdown("""
+- **[🔗 Visit our Clan Website](https://www.auosrs.com.au/)**
+- **[💬 Join our Discord Server](Discord.gg/auosrs)**
+""")
+
+
+# FIX: Replaced the corrupted character with the correct emoji.
+st.info("**Work In Progress:** This preview is a work in progress! Please contact the admin team to provide feedback or contribute to the project", icon="💡")
