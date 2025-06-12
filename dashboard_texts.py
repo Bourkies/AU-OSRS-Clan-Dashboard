@@ -3,7 +3,24 @@
 
 import random
 
-# --- Hall of Shame (PvP Leaderboard) ---
+# --- Dashboard Wide Configs ---
+VALUABLE_DROPS_MVP_CONFIG = {
+    "top_earners_count": 1,
+    "biggest_drops_count": 1,
+}
+
+# --- 1_💰_Valuable_Drops ---
+TOP_EARNER_MESSAGES = [
+    "The clan's top earner is {player}, raking in a massive {value}!",
+    "{player} is printing money, with total drops valued at {value}!",
+]
+
+BIGGEST_DROP_MESSAGES = [
+    "{player} hit the jackpot with a {item} drop worth {value}!",
+    "What a drop! {player} landed a {item} for {value}!",
+]
+
+# --- 2_💀_PvP_Leaderboard ---
 HALL_OF_SHAME_CONFIG = {
     "sackillu22": "{player} has been sat {deaths} times for a total of {value} gp!",
     "Au Joel": None,
@@ -21,8 +38,7 @@ def get_shame_message(player, deaths, value):
     message_template = HALL_OF_SHAME_CONFIG.get(player) or random.choice(DEFAULT_SHAME_MESSAGES)
     return message_template.format(player=player, deaths=deaths, value=value)
 
-
-# --- 111 Kicks Page ---
+# --- 3_👢_111_Kicks ---
 TOP_KICKED_MESSAGES = [
     "The clan's favourite bootie is {player}, kicked {count} times.",
     "{player} has seen the login screen {count} times this period.",
@@ -33,23 +49,21 @@ FASTEST_FINGER_MESSAGES = [
     "{player} is laying down the law, with {count} kicks delivered.",
 ]
 
-# --- Stolen Whips Page ---
+# --- 4_🐍_Stolen_Whips ---
 WHIP_QUEEN = "Abby Queen"
 WHIP_SHAME_MESSAGE = "{queen} has rightfully earned {queen_count} whips. The clan owes her {total_stolen} whips! Shame on {top_thief} for being the top thieving rat."
 
-
-# --- Biggest Yappers Page ---
+# --- 5_🗣️_Biggest_Yappers ---
 TOP_YAPPER_MESSAGES = ["The clan's biggest menace is {player}, spamming '111' {count} times."]
 TOP_GZER_MESSAGES = ["The most supportive member is {player}, with {count} GZs."]
 
-
-# --- Personal Bests Page ---
+# --- 7_⏱️_Personal_Bests ---
 SWEATIEST_PLAYERS_MESSAGES = [
     "{player} has {count} records—someone hose them down, they're sweating through the leaderboard!",
     "{player} spent more time Ruby Bolt resetting than sleeping. {count} records say it paid off… kinda.",
 ]
 
-# --- Recent Achievements Page ---
+# --- 8_🏆_Recent_Achievements ---
 HIGH_HITTER_MESSAGES = ["o/ {player} has joined the ranks of the High Hitters on {date}."]
 MAXED_SKILL_MESSAGES = ["On {date}, {player} finally maxed {skill}! No more training for them."]
 COMBAT_TASK_MESSAGES = ["A new PvM legend is born! {player} completed the {tier} task '{task}' on {date}."]
