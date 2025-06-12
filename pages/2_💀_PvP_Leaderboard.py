@@ -1,61 +1,159 @@
 # dashboard/pages/2_💀_PvP_Leaderboard.py
-# Refactored to display pre-aggregated PvP data.
+# Rebuilt to mirror the structure of the Valuable Drops page.
 
 import streamlit as st
 import pandas as pd
-import utils
-import dashboard_texts as texts
+import Streamlit_utils
+import random
+import toml
+from pathlib import Path
+from datetime import datetime, timedelta, timezone
 
-st.title("💀 PvP Leaderboards")
-st.markdown("This page shows leaderboards for player kills and deaths in the Wilderness.")
+st.set_page_config(page_title="PvP Leaderboard", page_icon="💀", layout="wide")
 
-df_kills = utils.load_table("pvp_kills_summary")
-df_deaths = utils.load_table("pvp_deaths_summary")
+# --- Helper Functions ---
 
-if df_kills.empty or df_deaths.empty:
-    st.warning("No PvP data could be loaded. The ETL pipeline may not have run yet.")
-else:
-    period_suffix = utils.display_time_period_selector(key_prefix="pvp")
+@st.cache_data(ttl=300)
+def load_texts():
+    """Loads text snippets from the TOML file."""
+    try:
+        texts_path = 'dashboard_texts.toml'
+        return toml.load(texts_path)
+    except FileNotFoundError:
+        st.error(f"Error: `dashboard_texts.toml` not found at expected path '{texts_path}'.")
+        return {}
+    except Exception as e:
+        st.error(f"Failed to load or parse dashboard_texts.toml: {e}")
+        return {}
+
+def display_column_content(column_type, texts, dashboard_config, period_options_map, run_time):
+    """
+    Generic function to display the content for either the 'Kills' or 'Deaths' column.
+    """
+    page_texts = texts.get('pvp_leaderboard', {})
     
-    kills_count_col = f'Kills_{period_suffix}' if period_suffix != "All_Time" else 'Kills_All_Time'
-    kills_value_col = f'Total_Value_{period_suffix}'
-    deaths_count_col = f'Deaths_{period_suffix}' if period_suffix != "All_Time" else 'Deaths_All_Time'
-    deaths_value_col = f'Total_Value_Lost_{period_suffix}' if period_suffix != "All_Time" else 'Total_Value_Lost_All_Time'
+    # --- Load Data ---
+    summary_table = f"pvp_{column_type.lower()}_summary"
+    detail_table_prefix = f"pvp_{column_type.lower()}_detail_"
+    timeseries_table = f"pvp_{column_type.lower()}_timeseries"
+
+    df_summary = Streamlit_utils.load_table(summary_table)
+    df_timeseries = Streamlit_utils.load_table(timeseries_table)
+
+    if df_summary.empty:
+        st.warning(f"No PvP {column_type} data could be loaded. The ETL pipeline may not have run yet.")
+        return
+
+    # --- Time Period Selector (gets value from the main selector) ---
+    selected_period_label = st.session_state.pvp_time_period
+    period_suffix = period_options_map.get(selected_period_label)
+
+    if not period_suffix:
+        st.error("Could not determine time period.")
+        return
+
+    df_detail = Streamlit_utils.load_table(f"{detail_table_prefix}{period_suffix.lower()}")
+
+    value_col = f'Value_{period_suffix}'
+    count_col = f'Count_{period_suffix}'
     
-    st.header("Hall of Shame")
-    df_shame = df_deaths[df_deaths['Username'].isin(texts.HALL_OF_SHAME_CONFIG.keys())]
-    df_shame_period = df_shame[df_shame[deaths_count_col] > 0]
-    
-    if df_shame_period.empty:
-        st.info("The usual suspects have kept themselves safe this period. Well done.")
-    else:
-        for _, row in df_shame_period.iterrows():
-            player = row['Username']
-            deaths = int(row[deaths_count_col])
-            value_lost = f"{int(row[deaths_value_col]):,}"
-            st.info(texts.get_shame_message(player, deaths, value_lost), icon="😭")
+    df_period_summary = df_summary[df_summary[count_col] > 0] if count_col in df_summary.columns else pd.DataFrame()
+
+    # --- MVP Section ---
+    if column_type == "Kills":
+        st.header("🏆 Kill MVPs")
+        mvp_count = page_texts.get('most_valuable_pk_count', 1)
+        st.subheader(f"Most Valuable PKer{'s' if mvp_count > 1 else ''}")
+        if not df_period_summary.empty:
+            mvps = df_period_summary.sort_values(by=value_col, ascending=False).head(mvp_count)
+            messages = page_texts.get('most_valuable_pk_messages', [])
+            random.shuffle(messages)
+            for i, row in enumerate(mvps.itertuples()):
+                msg = messages[i % len(messages)] if messages else "💥 **{player}** was the top PKer with **{count}** kills for **{value}**."
+                st.success(msg.format(player=row.Username, count=getattr(row, count_col), value=Streamlit_utils.format_gp(getattr(row, value_col))))
+        else:
+            st.info("No PKers this period.")
+
+        st.subheader("Biggest Single PK")
+        if not df_detail.empty:
+             biggest_pk = df_detail.sort_values(by='Item_Value', ascending=False).iloc[0]
+             st.success(f"☠️ **{biggest_pk['Username']}** landed a massive **{Streamlit_utils.format_gp(biggest_pk['Item_Value'])}** kill on **{biggest_pk['Opponent']}**!")
+        else:
+             st.info("No PKs to determine the biggest.")
+
+    else: # Deaths Column
+        st.header("Hall of Shame")
+        shame_config = page_texts.get('hall_of_shame', {})
+        default_shame = page_texts.get('default_shame_messages', [])
+        
+        shameful_players = df_period_summary[df_period_summary['Username'].isin(shame_config.keys())]
+        if shameful_players.empty:
+            st.info("The usual suspects kept themselves safe this period. Well done.")
+        else:
+            for _, row in shameful_players.iterrows():
+                player = row['Username']
+                msg_template = shame_config.get(player) or random.choice(default_shame)
+                st.error(msg_template.format(player=player, deaths=row[count_col], value=Streamlit_utils.format_gp(row[value_col])))
+
+
+    # --- Leaderboard Table ---
     st.markdown("---")
+    st.subheader(f"Leaderboard: Top {column_type}")
+    if not df_period_summary.empty:
+        display_df = df_period_summary.sort_values(by=value_col, ascending=False)[['Username', value_col, count_col]]
+        display_df.rename(columns={'Username': 'Player', value_col: 'Total Value', count_col: column_type}, inplace=True)
+        display_df['Total Value'] = display_df['Total Value'].apply(Streamlit_utils.format_gp)
+        st.dataframe(display_df, use_container_width=True, hide_index=True)
+    else:
+        st.info(f"No {column_type.lower()} recorded for this time period.")
 
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.subheader("Top Killers (The Winners)")
-        df_killers_period = df_kills[df_kills[kills_count_col] > 0].sort_values(by=kills_value_col, ascending=False)
-        if df_killers_period.empty:
-            st.info("No kills recorded for this period.")
+    # --- Chart ---
+    st.markdown("---")
+    st.subheader(f"{column_type} Over Time")
+    if not df_timeseries.empty:
+        chart_data = Streamlit_utils.get_chart_data_for_period(df_timeseries, selected_period_label, dashboard_config, period_options_map, run_time, 'Count')
+        if not chart_data.empty:
+            st.metric(label=f"Total {column_type} in Period", value=f"{int(chart_data['Value'].max()):,}")
+            st.line_chart(chart_data.set_index('Date')['Value'])
         else:
-            df_killers_display = df_killers_period[['Username', kills_value_col, kills_count_col]]
-            df_killers_display[kills_value_col] = df_killers_display[kills_value_col].apply(lambda x: f"{int(x):,} gp")
-            df_killers_display.rename(columns={'Username':'Player', kills_value_col: 'Value from Kills', kills_count_col: 'Kills'}, inplace=True)
-            st.dataframe(df_killers_display, use_container_width=True, hide_index=True)
+            st.info(f"No {column_type.lower()} data to plot for this period.")
+    else:
+        st.info("No timeseries data available for this report.")
 
-    with col2:
-        st.subheader("Top 'Sitters' (The Losers)")
-        df_deathers_period = df_deaths[df_deaths[deaths_count_col] > 0].sort_values(by=deaths_count_col, ascending=False)
-        if df_deathers_period.empty:
-            st.info("No deaths recorded for this period.")
-        else:
-            df_deathers_display = df_deathers_period[['Username', deaths_value_col, deaths_count_col]]
-            df_deathers_display[deaths_value_col] = df_deathers_display[deaths_value_col].apply(lambda x: f"{int(x):,} gp")
-            df_deathers_display.rename(columns={'Username':'Player', deaths_value_col: 'Value Lost', deaths_count_col: 'Deaths'}, inplace=True)
-            st.dataframe(df_deathers_display, use_container_width=True, hide_index=True)
+
+# --- Main Page Execution ---
+st.title("💀 PvP Leaderboard")
+st.markdown("Who are the hunters and who are the hunted? This page tracks all PvP action.")
+
+texts = load_texts()
+dashboard_config = Streamlit_utils.load_dashboard_config()
+df_meta = Streamlit_utils.load_table("run_metadata")
+run_time = pd.to_datetime(df_meta['last_updated_utc'].iloc[0], utc=True) if not df_meta.empty else datetime.now(timezone.utc)
+
+period_options_map = Streamlit_utils.get_time_period_options(dashboard_config)
+st.sidebar.markdown("### Select Time Period")
+
+ordered_suffixes = ['Custom_Days', 'Prev_Week', 'Prev_Month', 'YTD', 'All_Time']
+suffix_to_label_map = {v: k for k, v in period_options_map.items()}
+ordered_labels = [suffix_to_label_map[suffix] for suffix in ordered_suffixes if suffix in suffix_to_label_map]
+
+# Use session_state to keep the selection consistent across the page
+if 'pvp_time_period' not in st.session_state:
+    st.session_state.pvp_time_period = ordered_labels[0]
+
+st.sidebar.radio(
+    "Choose a time period:", 
+    ordered_labels,
+    key="pvp_time_period", 
+    horizontal=False,
+)
+
+st.header(f"Displaying Report for: {st.session_state.pvp_time_period}")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    display_column_content("Kills", texts, dashboard_config, period_options_map, run_time)
+
+with col2:
+    display_column_content("Deaths", texts, dashboard_config, period_options_map, run_time)
