@@ -3,7 +3,7 @@
 
 import streamlit as st
 import pandas as pd
-import utils
+import Streamlit_utils
 
 st.title("📜 Clan Collection Log")
 st.markdown("A summary of all unique items collected by the clan, combining historical and current data.")
