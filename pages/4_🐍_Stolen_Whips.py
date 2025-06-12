@@ -3,7 +3,7 @@
 
 import streamlit as st
 import pandas as pd
-import utils
+import Streamlit_utils
 import dashboard_texts as texts
 
 st.title("🐍 Stolen Whips Leaderboard")
