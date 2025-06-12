@@ -4,7 +4,7 @@
 import streamlit as st
 import pandas as pd
 import random
-import utils
+import Streamlit_utils
 import dashboard_texts as texts
 
 st.set_page_config(page_title="Personal Bests", page_icon="⏱️", layout="wide")
