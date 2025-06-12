@@ -4,7 +4,7 @@
 import streamlit as st
 import pandas as pd
 import random
-import utils
+import Streamlit_utils
 import dashboard_texts as texts
 
 def display_yapper_leaderboard(df, period_suffix, title, messages, icon):
