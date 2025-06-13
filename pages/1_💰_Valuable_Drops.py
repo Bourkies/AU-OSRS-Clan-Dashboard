@@ -80,76 +80,6 @@ def display_mvp_section(df_leaderboard, df_period_detail, texts, value_col):
 
     st.markdown("---")
 
-def get_chart_data_for_period(df_timeseries, selected_period_label, dashboard_config, period_options_map, run_time):
-    """
-    Filters the timeseries data for the selected period and prepares it for charting.
-    This version correctly slices and zeroes the data for each time period.
-    """
-    period_suffix = period_options_map.get(selected_period_label)
-
-    # Determine the correct frequency, start date, and end date based on the period suffix
-    start_date, end_date, target_freq = None, None, None
-
-    if period_suffix == 'Custom_Days':
-        custom_days = int(dashboard_config.get('custom_lookback_days', 14))
-        target_freq = '6H'
-        start_date = (run_time - timedelta(days=custom_days)).replace(hour=0, minute=0, second=0, microsecond=0)
-        end_date = run_time
-    elif period_suffix == 'Prev_Week':
-        target_freq = 'D'
-        days_since_monday = run_time.weekday()
-        start_of_current_week = (run_time - timedelta(days=days_since_monday)).replace(hour=0, minute=0, second=0, microsecond=0)
-        end_date = start_of_current_week
-        start_date = end_date - timedelta(days=7)
-    elif period_suffix == 'Prev_Month':
-        target_freq = 'D'
-        end_date = run_time.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-        start_date = (end_date - timedelta(days=1)).replace(day=1)
-    elif period_suffix == 'YTD':
-        target_freq = 'W'
-        start_date = run_time.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
-        end_date = run_time
-    else: # All-Time
-        target_freq = 'W'
-
-    if not target_freq: return pd.DataFrame()
-
-    df_filtered_by_freq = df_timeseries[df_timeseries['Frequency'] == target_freq].copy()
-    if df_filtered_by_freq.empty:
-        return pd.DataFrame()
-
-    df_filtered_by_freq['Date'] = pd.to_datetime(df_filtered_by_freq['Date'], utc=True)
-    df_filtered_by_freq.sort_values('Date', inplace=True)
-
-    # All-Time case
-    if period_suffix == 'All_Time':
-        df_all_time = df_filtered_by_freq.copy()
-        df_all_time['Value'] = df_all_time['Cumulative_Value']
-        
-        # FIX: Add a zero-point anchor to make the graph start at 0
-        if not df_all_time.empty:
-            first_date = df_all_time.iloc[0]['Date']
-            # Create a zero point one period before the first data point
-            zero_date = first_date - timedelta(days=7) # Since it's weekly frequency
-            zero_row = pd.DataFrame([{'Date': zero_date, 'Value': 0}])
-            df_final = pd.concat([zero_row, df_all_time[['Date', 'Value']]], ignore_index=True)
-            return df_final
-        else:
-            return df_all_time
-
-    # For all other periods, we filter and zero the data
-    df_before_period = df_filtered_by_freq[df_filtered_by_freq['Date'] < start_date]
-    start_value = df_before_period.iloc[-1]['Cumulative_Value'] if not df_before_period.empty else 0
-    
-    df_in_period = df_filtered_by_freq[(df_filtered_by_freq['Date'] >= start_date) & (df_filtered_by_freq['Date'] < end_date)].copy()
-    
-    df_in_period['Value'] = df_in_period['Cumulative_Value'] - start_value
-    
-    zero_row = pd.DataFrame([{'Date': start_date, 'Value': 0}])
-    
-    df_final = pd.concat([zero_row, df_in_period[['Date', 'Value']]], ignore_index=True)
-    
-    return df_final
 
 # --- Main Page Execution ---
 st.title("💰 Valuable Drops")
@@ -207,9 +137,17 @@ else:
         st.metric(label="Top Earners by Total Value", value="")
         if not df_period_leaderboard.empty:
             top_earners = df_period_leaderboard.sort_values(by=value_col, ascending=False)[['Username', value_col, count_col]]
-            top_earners.rename(columns={'Username': 'Player', value_col: 'Total Value', count_col: 'Drops'}, inplace=True)
-            top_earners['Total Value'] = top_earners['Total Value'].apply(Streamlit_utils.format_gp)
-            st.dataframe(top_earners, use_container_width=True, hide_index=True)
+            
+            st.dataframe(
+                top_earners, 
+                column_config={
+                    "Username": "Player",
+                    value_col: st.column_config.NumberColumn("Total GP Value", format="%d"),
+                    count_col: "Drops"
+                },
+                use_container_width=True, 
+                hide_index=True
+            )
         else:
             st.info("No valuable drops recorded for this time period.")
             
@@ -224,10 +162,21 @@ else:
         
         st.metric(label=title, value="")
         if not display_df.empty:
-            display_df['Date'] = display_df['Timestamp'].dt.strftime('%Y-%m-%d')
-            display_df['Value'] = display_df['Item_Value'].apply(Streamlit_utils.format_gp)
-            display_df.rename(columns={'Username': 'Player', 'Item_Name': 'Item'}, inplace=True)
-            st.dataframe(display_df[['Date', 'Player', 'Item', 'Value']], use_container_width=True, hide_index=True)
+            display_df_formatted = display_df.copy()
+            display_df_formatted['Date'] = display_df_formatted['Timestamp'].dt.strftime('%Y-%m-%d')
+            
+            st.dataframe(
+                display_df_formatted,
+                column_config={
+                    "Date": "Date",
+                    "Username": "Player",
+                    "Item_Name": "Item",
+                    "Item_Value": st.column_config.NumberColumn("GP Value", format="%d")
+                },
+                column_order=("Date", "Username", "Item_Name", "Item_Value"),
+                use_container_width=True, 
+                hide_index=True
+            )
         else: 
             st.info("No drops found for this period.")
 
@@ -236,7 +185,7 @@ else:
     if df_timeseries.empty:
         st.info("No timeseries data available to plot.")
     else:
-        chart_data = get_chart_data_for_period(df_timeseries, selected_period_label, dashboard_config, period_options_map, run_time)
+        chart_data = Streamlit_utils.get_chart_data_for_period(df_timeseries, selected_period_label, dashboard_config, period_options_map, run_time)
         
         if not chart_data.empty:
             total_gp_in_period = chart_data['Value'].max()
