@@ -15,29 +15,40 @@ biggest_drop_messages = [
 ]
 
 [pvp_leaderboard]
-most_valuable_pk_count = 1
-most_valuable_pk_messages = [
+# MVP Counts
+most_valuable_pker_count = 1
+biggest_pk_count = 1
+most_valuable_donor_count = 1
+biggest_loss_count = 1
+
+# MVP Messages
+most_valuable_pker_messages = [
     "💥 **{player}** was the most feared pker, securing **{value}** in loot over **{count}** kills!",
     "💥 With **{count}** kills, **{player}** brought home a massive **{value}** in PKs."
 ]
-
-biggest_pk_count = 1
 biggest_pk_messages = [
     "☠️ The biggest single PK belongs to **{player}**, who landed a massive **{value}** kill!",
     "☠️ Somebody call an ambulance! **{player}** secured the period's biggest kill, worth **{value}**."
 ]
+most_valuable_donor_messages = [
+    "💸 **{player}** was the most generous donor, losing a total of **{value}** over **{count}** deaths.",
+    "💸 Hope it wasn't a hardcore! **{player}** lost **{value}** across **{count}** deaths."
+]
+biggest_loss_messages = [
+    "💔 The most heartbreaking loss goes to **{player}**, who died for **{value}** in a single kill.",
+    "💔 Ouch. **{player}** faced a devastating loss of **{value}** in one trip to the wildy."
+]
 
-# Specific messages for the hall of shame
-[pvp_leaderboard.hall_of_shame]
-sackillu22 = "😭 **{player}** has been sat **{deaths}** times for a total of **{value}** gp!"
+# Hall of Shame Configuration
+hall_of_shame_default_search = "Sackillu22"
+no_deaths_message = "😇 Someone get **{player}** a PVM cape! They have no deaths in this period. Guess they haven't logged on for a while..."
+[pvp_leaderboard.hall_of_shame_messages]
+Sackillu22 = "😭 **{player}** has been sat **{deaths}** times for a total of **{value}** gp!"
 "Au Joel" = "😭 **{player}** seems to enjoy donating their gear. They've died **{deaths}** times, losing **{value}** gp."
 "Doug Lee" = "😭 **{player}** is a certified walking loot pinata, losing **{value}** over **{deaths}** deaths."
+"VOIDWAKER" = "😭 Even the mighty fall. **{player}** has donated **{value}** to the economy over **{deaths}** deaths. Gf."
+default = "This player's shame is not notable enough for a custom message. They died **{deaths}** times for **{value}**."
 
-# Default messages if a player isn't in the hall of shame list
-default_shame_messages = [
-    "😭 **{player}** is a liability, dying **{deaths}** times and losing **{value}** gp.",
-    "😭 **{player}** is donating gear to the wilderness, losing **{value}** gp over **{deaths}** deaths."
-]
 
 [kicks]
 top_kicked_count = 1
