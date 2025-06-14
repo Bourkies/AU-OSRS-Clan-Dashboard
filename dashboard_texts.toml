@@ -5,13 +5,29 @@
 top_earners_count = 2
 top_earner_messages = [
     "🤑 **{player}** was the top earner with **{value}**.",
-    "🤑 **{player}** absolutely crushed it, earning a total of **{value}**."
+    "🤑 **{player}** absolutely crushed it, earning a total of **{value}**.",
+    "💰 **{player}** carried the clan bank this week with a whopping **{value}** haul.",
+    "💰 Who needs a job when you're pulling in **{value}** like **{player}**?",
+    "🪙 **{player}** made more than Mod Ash’s salary — **{value}**, to be exact!",
+    "📈 Stonks only go up for **{player}**, with **{value}** earned!",
+    "🤑 IRS called, they want to audit **{player}** for making **{value}**.",
+    "🤑 **{player}** turned the loot pile into a gold mine: **{value}**!",
+    "💎 Giga-rich moment: **{player}** pulled in **{value}**!",
+    "💼 If PKing was a job, **{player}** would be Employee of the Month with **{value}** earned."
 ]
 
 biggest_drops_count = 2
 biggest_drop_messages = [
     "🎉 The biggest drop went to **{player}** who snagged a **{item}** worth **{value}**!",
-    "🎉 **{player}** hit the jackpot with a **{item}** valued at an incredible **{value}**."
+    "🎉 **{player}** hit the jackpot with a **{item}** valued at an incredible **{value}**.",
+    "💎 BOOM! **{player}** grabbed a **{item}** worth **{value}**!",
+    "🏆 That's not a drop, that's a legacy. **{player}** landed a **{item}** worth **{value}**.",
+    "📦 RNG gods have spoken: **{player}** scored a **{item}** for **{value}**.",
+    "🪙 **{player}** rolled the dice and got a **{item}** drop worth **{value}**!",
+    "💥 Loot alert! **{player}** pocketed a **{item}** valued at **{value}**!",
+    "🤑 That sound you heard? It was **{player}** cashing in a **{item}** for **{value}**.",
+    "🎁 GZ! **{player}** walked away with the loot crown — a **{item}** worth **{value}**.",
+    "🔥 Absolute heater! **{player}** landed a huge **{item}**, netting **{value}**."
 ]
 
 [pvp_leaderboard]
@@ -24,19 +40,51 @@ biggest_loss_count = 1
 # MVP Messages
 most_valuable_pker_messages = [
     "💥 **{player}** was the most feared pker, securing **{value}** in loot over **{count}** kills!",
-    "💥 With **{count}** kills, **{player}** brought home a massive **{value}** in PKs."
+    "💥 With **{count}** kills, **{player}** brought home a massive **{value}** in PKs.",
+    "💀 **{player}** turned the wilderness into a wallet farm, earning **{value}**.",
+    "💀 The wild trembled before **{player}**, who looted **{value}** in PKs.",
+    "⚔️ **{player}** farmed skulls like a champ—**{count}** kills and **{value}** looted.",
+    "🎯 Killed for sport? Maybe. But **{player}** earned **{value}** doing it.",
+    "🔥 **{player}** burned through the competition, pulling in **{value}** in loot.",
+    "💣 The only safe place from **{player}** is the GE. They PK'd **{value}** total!",
+    "🏹 Wilderness MVP: **{player}** made **{value}** worth of chaos.",
+    "👑 Crown that pker! **{player}** took home **{value}** in PK riches."
 ]
 biggest_pk_messages = [
     "☠️ The biggest single PK belongs to **{player}**, who landed a massive **{value}** kill!",
-    "☠️ Somebody call an ambulance! **{player}** secured the period's biggest kill, worth **{value}**."
+    "☠️ Somebody call an ambulance! **{player}** secured the period's biggest kill, worth **{value}**.",
+    "💀 **{player}** cleaned out someone's bank with a **{value}** kill!",
+    "💥 One shot, one dream destroyed. **{player}** took **{value}** in a single PK.",
+    "💸 Big risk, big reward — for **{player}**, that’s a **{value}** payday.",
+    "🔪 Someone forgot to protect item. **{player}** didn’t.",
+    "🧾 One kill. One inventory. One **{value}** paycheck. **{player}** wins.",
+    "🎯 Most valuable bounty goes to **{player}** with a **{value}** take.",
+    "⚰️ It’s not even close — **{player}** PK’d **{value}** in one kill.",
+    "💣 **{player}** nuked a poor soul for **{value}**!"
 ]
 most_valuable_donor_messages = [
     "💸 **{player}** was the most generous donor, losing a total of **{value}** over **{count}** deaths.",
-    "💸 Hope it wasn't a hardcore! **{player}** lost **{value}** across **{count}** deaths."
+    "💸 Hope it wasn't a hardcore! **{player}** lost **{value}** across **{count}** deaths.",
+    "💔 RIP to **{player}**'s gear tab — **{value}** donated via **{count}** deaths.",
+    "📉 Investment tip: Don't be **{player}**. They lost **{value}** in **{count}** deaths.",
+    "🪦 **{player}** funded half the clan’s loot with **{value}** in deaths.",
+    "🧼 Cleaning supplies: **{player}**'s entire bank, now wiped for **{value}**.",
+    "😵 **{player}** took 'high risk, high loss' to heart with **{value}** lost.",
+    "🧾 **{player}** wrote off **{value}** in death-related expenses this week.",
+    "🎭 Donator by choice or by misclick? Either way, **{player}** lost **{value}**.",
+    "📉 The donation fairy blessed **{player}** with zero luck and a **{value}** tax bill."
 ]
 biggest_loss_messages = [
     "💔 The most heartbreaking loss goes to **{player}**, who died for **{value}** in a single kill.",
-    "💔 Ouch. **{player}** faced a devastating loss of **{value}** in one trip to the wildy."
+    "💔 Ouch. **{player}** faced a devastating loss of **{value}** in one trip to the wildy.",
+    "💀 **{player}** died with **{value}** — their insurance policy must hurt.",
+    "📉 One misclick, one **{value}** mistake. RIP to **{player}**'s inventory.",
+    "🪦 Who brings that to the wildy? **{player}** did... and paid **{value}**.",
+    "🔥 **{player}**'s death was so bad it appeared in the stock market graphs.",
+    "⚰️ We’re holding a service for **{player}**, who lost **{value}** in one death.",
+    "💸 **{player}**: Making someone else rich for the price of **{value}**.",
+    "🧤 Gloves off, bank emptied — **{player}** took the biggest L with **{value}**.",
+    "💣 **{player}**’s splat was heard across Gielinor: **{value}** down the drain."
 ]
 
 # Hall of Shame Configuration
@@ -54,51 +102,114 @@ default = "This player's shame is not notable enough for a custom message. They 
 top_kicked_count = 1
 top_kicked_messages = [
     "👢 The clan's favourite bootie is **{player}**, kicked **{count}** times.",
-    "👢 **{player}** has seen the login screen **{count}** times this period."
+    "👢 **{player}** has seen the login screen **{count}** times this period.",
+    "🚪 Don't let the door hit you, **{player}** — kicked **{count}** times!",
+    "🥾 **{player}** must have parking issues with all these boots: **{count}** kicks.",
+    "🔁 Respawned at Lumbridge? Nah — just another kick for **{player}**.",
+    "⚖️ Justice served. **{player}** got the boot **{count}** times.",
+    "🧹 Clean-up crew special: **{player}**, removed **{count}** times.",
+    "🎟️ Frequent flyer of the Kick Express: **{player}** with **{count}** stamps.",
+    "💀 This isn’t Deadman Mode, **{player}** — stop dying to admin kicks.",
+    "🚷 Kicked so much it’s basically cardio: **{player}** with **{count}**!"
 ]
 
 fastest_finger_count = 1
 fastest_finger_messages = [
     "🔫 The admin with the happiest trigger finger is **{player}**, kicking **{count}** people.",
-    "🔫 **{player}** is laying down the law, with **{count}** kicks delivered."
+    "🔫 **{player}** is laying down the law, with **{count}** kicks delivered.",
+    "👮 **{player}** is judge, jury, and bouncer — **{count}** kicks handed out.",
+    "🚨 **{player}** was on a kicking spree! **{count}** boots deployed.",
+    "🧯 Kick firestarter of the week: **{player}** with **{count}**.",
+    "🔔 Ding ding! Another one booted by **{player}** — **{count}** times total.",
+    "⚔️ The kick wars were led by **{player}**, with **{count}** hits.",
+    "🏆 Fastest finger in the west — **{player}** boots **{count}**.",
+    "📋 Kicking leaderboard? Topped by **{player}**, with **{count}** removals.",
+    "🎮 Clan admin mode: activated. **{player}** booted **{count}** folks this round."
 ]
 
 [stolen_whips]
 whip_queen = "Abby Queen"
 whip_shame_messages = [
     "👑 {queen} has rightfully earned {queen_count} whips. The clan owes her {total_stolen} whips! Shame on **{top_thief}** for being the top thieving rat.",
-    "👑 While {queen} has {queen_count} whips, a total of {total_stolen} have been stolen! **{top_thief}** is the number one culprit."
+    "👑 While {queen} has {queen_count} whips, a total of {total_stolen} have been stolen! **{top_thief}** is the number one culprit.",
+    "😤 {queen} has secured {queen_count} whips, but a whopping {total_stolen} were stolen. **{top_thief}**, return what's rightfully hers!",
+    "🪓 The Whip Queen {queen} stands tall with {queen_count} whips — but **{top_thief}** tops the shame board with the most thefts out of {total_stolen}!",
+    "😠 Only {queen_count} whips for {queen}... yet {total_stolen} were stolen. **{top_thief}** leads the crime wave.",
+    "📉 Whip economy in shambles: {queen} owns {queen_count}, but {total_stolen} were stolen. Thanks a lot, **{top_thief}**.",
+    "🕵️‍♀️ Investigation ongoing: {queen} has {queen_count} whips. {total_stolen} were stolen. Prime suspect: **{top_thief}**.",
+    "💔 Tragedy strikes — {queen} earned {queen_count} whips, but {total_stolen} were stolen. Most by **{top_thief}**, the sticky-fingered menace.",
+    "📦 Lost: {total_stolen} whips. Claimed: {queen_count} by {queen}. Prime thief: **{top_thief}**. Justice needed.",
+    "🧾 The stats are in: {queen} = {queen_count} whips. Clan thieves = {total_stolen} stolen. **{top_thief}** leads the leaderboard of shame."
 ]
 
 [yappers]
 top_yapper_count = 1
 top_yapper_messages = [
     "🗣️ The clan's biggest menace is **{player}**, spamming '111' **{count}** times.",
-    "🗣️ Is there an echo in here? Oh, it's just **{player}** saying '111' **{count}** times."
+    "🗣️ Is there an echo in here? Oh, it's just **{player}** saying '111' **{count}** times.",
+    "🔊 **{player}** broke the chatbox — **{count}** 111s in one session!",
+    "📢 **{player}** has the loudest mic and the least chill: **{count}** yaps.",
+    "🗣️ 111 spam? Classic **{player}**, with **{count}** contributions.",
+    "📣 **{player}** kept yelling '111' like it was Morse code — **{count}** times.",
+    "🔇 Someone get the mute button — **{player}** is at **{count}** yaps!",
+    "🎤 Freestyle or spam? Either way, **{player}** hit **{count}** yaps.",
+    "💬 Chat MVP (Most Verbal Player): **{player}** with **{count}** 111s.",
+    "📞 **{player}** has 'push-to-talk' stuck — **{count}** yaps logged."
 ]
 
 top_gzer_count = 1
 top_gzer_messages = [
     "🎉 The most supportive member is **{player}**, with **{count}** GZs.",
-    "🎉 Leading the cheer squad is **{player}** with a massive **{count}** grats!"
+    "🎉 Leading the cheer squad is **{player}** with a massive **{count}** grats!",
+    "🙌 **{player}** handing out GZs like Oprah — **{count}** so far!",
+    "🎊 GZ-machine online: **{player}** with **{count}** delivered.",
+    "🗨️ **{player}** be like 'gz gz gz' — **{count}** times this period.",
+    "📈 GZs per minute? High. Thanks to **{player}**.",
+    "🥇 Most wholesome spam: **{player}** with **{count}** GZs.",
+    "🎯 **{player}** never misses a level up — **{count}** GZs on record.",
+    "💬 ‘Grats bot’ detected: **{player}**, with **{count}** GZs.",
+    "🎤 Hype leader award goes to **{player}**, hitting **{count}** GZs."
 ]
 
 [personal_bests]
 sweatiest_players_count = 3
 sweatiest_players_messages = [
     "⭐ **{player}** has **{count}** records—someone hose them down, they're sweating through the leaderboard!",
-    "⭐ **{player}** spent more time Ruby Bolt resetting than sleeping. **{count}** records say it paid off… kinda."
+    "⭐ **{player}** spent more time Ruby Bolt resetting than sleeping. **{count}** records say it paid off… kinda.",
+    "🔥 **{player}** isn't just sweaty — they're evaporating. **{count}** records and counting!",
+    "💪 **{player}** is grinding so hard they left grooves in the keyboard. **{count}** records earned with sheer willpower.",
+    "📈 Efficiency experts agree: **{player}** has min-maxed their way to **{count}** records. Please touch grass.",
+    "🧠 **{player}** uploaded their consciousness to Runelite. **{count}** records achieved, humanity lost.",
+    "🏆 Tryhard alert! **{player}** racked up **{count}** records and still asked how to optimize more.",
+    "🧊 Cool down! **{player}** is melting through metas with **{count}** records — the real boss of the board.",
+    "🤖 Rumor has it **{player}** is a raid bot in disguise. **{count}** records and zero signs of stopping.",
+    "🛏️ Sleep is for the weak — and **{player}**. With **{count}** records, they clearly haven’t logged off since 2019."
 ]
 
 [recent_achievements]
 maxed_skill_messages = [
     "🎉 On **{date}**, **{player}** finally maxed **{skill}**! No more training for them.",
-    "🎉 Ding! **{player}** achieved level 99 in **{skill}** on **{date}**. Congrats!"
+    "🎉 Ding! **{player}** achieved level 99 in **{skill}** on **{date}**. Congrats!",
+    "🎓 **{player}** just got their PhD in **{skill}** on **{date}**. All that XP finally paid off!",
+    "🎊 It happened! **{player}** hit 99 **{skill}** on **{date}** — give them the cape and the clout.",
+    "🏁 Maxed! **{player}** crossed the finish line in **{skill}** on **{date}**. The grind ends here... or does it?",
+    "⚡ **{player}** ascended to level 99 in **{skill}** on **{date}**. We’re not worthy!",
+    "🧠 **{player}** maxed **{skill}** on **{date}**, proving they’ve got more patience than the rest of us combined.",
+    "🥳 After countless hours, **{player}** reached 99 in **{skill}** on **{date}**. Go touch some grass now!",
+    "💀 **{player}** sacrificed sleep, sanity, and social life to max **{skill}** on **{date}**. Totally worth it.",
+    "💯 All gas, no breaks. **{player}** hit the 99 mark in **{skill}** on **{date}** — certified grinder."
 ]
 level_up_messages = [
     "🔼 On **{date}**, **{player}** reached level **{level}** in **{skill}**.",
     "🔼 Level up! **{player}** is now level **{level}** in **{skill}** as of **{date}**.",
-    "🔼 Keep training! **{player}** just hit **{skill}** level **{level}** on **{date}**."
+    "🔼 Keep training! **{player}** just hit **{skill}** level **{level}** on **{date}**.",
+    "🚀 **{player}** blasted through level **{level}** in **{skill}** on **{date}**. No signs of slowing down!",
+    "🆙 Ding ding! **{player}** just leveled **{skill}** to **{level}** on **{date}**. Keep 'em coming!",
+    "🔥 The XP keeps rolling! **{player}** hit level **{level}** in **{skill}** on **{date}**.",
+    "🥤 Fueled by caffeine and questionable life choices, **{player}** reached level **{level}** in **{skill}** on **{date}**.",
+    "📈 Progress is progress! **{player}** is now level **{level}** in **{skill}** as of **{date}**.",
+    "🎯 Another step closer to 99. **{player}** hit level **{level}** in **{skill}** on **{date}**.",
+    "📚 **{player}** studied the blade… and the XP guide. Level **{level}** in **{skill}** achieved on **{date}**."
 ]
 combat_task_messages = [
     "⚔️ A new PvM legend is born! **{player}** completed the **{tier}** task '{task}' on **{date}**.",
