@@ -26,7 +26,20 @@ else:
     st.warning("Last updated time not available. The ETL pipeline may not have run yet.", icon="⚠️")
 
 st.info("**This is a preview**, some data maybe incorrect or fail to display. This project is a work in progress!", icon="💡")
-st.markdown("Welcome to the official activity and achievement dashboard for the AU OSRS clan.")
+st.error("TO DO:")
+st.markdown("""
+- Verify data
+- Replace AI place holder text on all pages
+- Re order and correct titles on pages
+- Other improvements, changes and additions PLEASE SHARE FEED BACK!
+- Remove Duplicate data/Set a date for data collection to start (13/6/25 best day to start)
+- Align the personal bests (clan records) page boss names correctly
+- Clan records, look at grouping players within 0.6 seconds together
+- Correctly set the clan clog previous data and group correctly
+- Fix big H small h issue is ELT pipeline
+- Add slider to each page for number of MVP’s to display
+""")
+
 st.markdown("---")
 
 # Use columns to center and constrain the image width
