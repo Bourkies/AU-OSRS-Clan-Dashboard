@@ -1,111 +1,106 @@
 # dashboard/pages/8_🏆_Recent_Achievements.py
-# Refactored to be fully data-driven.
 
 import streamlit as st
 import pandas as pd
 import random
 import Streamlit_utils
-import dashboard_texts as texts
-from datetime import datetime
+import toml
 
 st.set_page_config(page_title="Recent Achievements", page_icon="🏆", layout="wide")
 
-# --- Page Configuration ---
-# This dictionary drives the entire page. To add a new section, just add a new entry here.
-# The `filter` function provides a way to apply custom logic to the DataFrame for each section.
-ACHIEVEMENT_CONFIG = {
-    "high_hitters": {
-        "title": "Heil Hitters",
-        "icon": "🫡",
-        "broadcast_type": "Combat Task",
-        "message": texts.HIGH_HITTER_MESSAGES,
-        "formatter": lambda r: {'player': r.get('Username'), 'date': pd.to_datetime(r.get('Timestamp')).strftime('%Y-%m-%d')},
-        "filter": lambda df: df[df['Task_Name'] == 'High Hitter']
-    },
-    "maxed_skills": {
-        "title": "Maxed Skills",
-        "icon": "🎉",
-        "broadcast_type": "Level Up",
-        "message": texts.MAXED_SKILL_MESSAGES,
-        "formatter": lambda r: {'player': r.get('Username'), 'skill': r.get('Skill'), 'date': pd.to_datetime(r.get('Timestamp')).strftime('%Y-%m-%d')},
-        "filter": lambda df: df[df['New_Level'].isin([99, 126])]
-    },
-    "combat_tasks": {
-        "title": "Recent Combat Tasks",
-        "icon": "⚔️",
-        "broadcast_type": "Combat Task",
-        "message": texts.COMBAT_TASK_MESSAGES,
-        "formatter": lambda r: {'player': r.get('Username'), 'task': r.get('Task_Name'), 'tier': r.get('Tier'), 'date': pd.to_datetime(r.get('Timestamp')).strftime('%Y-%m-%d')},
-        "filter": lambda df: df[df['Task_Name'] != 'High Hitter'] # Exclude high hitters from this general list
-    },
-    "diaries": {
-        "title": "Recent Diary Completions",
-        "icon": "🗺️",
-        "broadcast_type": "Diary",
-        "message": texts.DIARY_MESSAGES,
-        "formatter": lambda r: {'player': r.get('Username'), 'diary': r.get('Task_Name'), 'tier': r.get('Tier'), 'date': pd.to_datetime(r.get('Timestamp')).strftime('%Y-%m-%d')}
-    },
-    "ca_tiers": {
-        "title": "Recent Combat Achievement Tiers",
-        "icon": "🛡️",
-        "broadcast_type": "Combat Achievement Tier",
-        "message": texts.CA_TIER_MESSAGES,
-        "formatter": lambda r: {'player': r.get('Username'), 'tier': r.get('Tier'), 'date': pd.to_datetime(r.get('Timestamp')).strftime('%Y-%m-%d')}
-    },
-    "pets": {
-        "title": "Recent Pet Drops",
-        "icon": "🐾",
-        "broadcast_type": "Pet",
-        "message": ["Congratulations to {player} on receiving the {pet_name} pet on {date}!"],
-        "formatter": lambda r: {'player': r.get('Username'), 'pet_name': r.get('Pet_Name'), 'date': pd.to_datetime(r.get('Timestamp')).strftime('%Y-%m-%d')}
-    }
-}
+@st.cache_data(ttl=300)
+def load_texts():
+    """Loads text snippets from the TOML file."""
+    try:
+        return toml.load('dashboard_texts.toml')
+    except Exception as e:
+        st.error(f"Failed to load dashboard_texts.toml: {e}")
+        return {}
 
-def display_section(df, config):
-    """
-    Generic function to display a section based on the configuration.
-    """
-    st.header(f"{config['icon']} {config['title']}")
+def format_achievement(row, texts):
+    """Formats a row from the achievements DataFrame into a displayable string."""
+    broadcast_type = row.get('Broadcast_Type')
+    page_texts = texts.get('recent_achievements', {})
     
-    # Filter the dataframe for the specific broadcast type
-    df_section = df[df['Broadcast_Type'] == config['broadcast_type']].copy()
+    player = f"**{row.get('Username', 'Someone')}**"
+    date = pd.to_datetime(row.get('Timestamp')).strftime('%Y-%m-%d')
     
-    # Apply any additional custom filtering logic
-    if 'filter' in config:
-        df_section = config['filter'](df_section)
+    if broadcast_type == 'Maxed Skill (99)':
+        messages = page_texts.get('maxed_skill_messages', [])
+        return random.choice(messages).format(player=player, skill=row.get('Skill'), date=date)
+    
+    if broadcast_type == 'Maxed Combat':
+        return f"👑 On {date}, {player} has achieved the highest combat level of 126!"
 
-    if df_section.empty:
-        st.info(f"No recent '{config['title']}' achievements found.")
-        return
+    elif broadcast_type == 'Level Up':
+        messages = page_texts.get('level_up_messages', [])
+        return random.choice(messages).format(player=player, level=row.get('New_Level'), skill=row.get('Skill'), date=date)
 
-    # Display each achievement in the filtered dataframe
-    for _, row in df_section.iterrows():
-        try:
-            # Safely format the message using the provided formatter
-            format_dict = config['formatter'](row)
-            message = random.choice(config['message']).format(**format_dict)
-            st.success(message, icon=config['icon'])
-        except (KeyError, TypeError) as e:
-            # This helps debug if the data from the DB is missing a required column for the message
-            st.error(f"Error formatting message for {config['title']}: {e}. Check the formatter and data.")
-            
-    st.markdown("---")
+    elif broadcast_type == 'Combat Task':
+        messages = page_texts.get('combat_task_messages', [])
+        return random.choice(messages).format(player=player, tier=row.get('Tier'), task=row.get('Task_Name'), date=date)
 
+    elif broadcast_type == 'Diary':
+        messages = page_texts.get('diary_messages', [])
+        return random.choice(messages).format(player=player, tier=row.get('Tier'), diary=row.get('Task_Name'), date=date)
+        
+    elif broadcast_type == 'Combat Achievement Tier':
+        messages = page_texts.get('ca_tier_messages', [])
+        return random.choice(messages).format(player=player, tier=row.get('Tier'), date=date)
 
-# --- Main Page Execution ---
-st.title("🏆 Recent Clan Achievements")
-st.markdown("A feed of the most recent significant achievements from around the clan.")
+    elif broadcast_type == 'Pet':
+        messages = page_texts.get('pet_messages', [])
+        return random.choice(messages).format(player=player, pet_name=row.get('Pet_Name'), date=date)
 
-# Load the single, consolidated recents table
-df_recents = utils.load_table("recents_list")
+    elif broadcast_type == 'Quest':
+        messages = page_texts.get('quest_messages', [])
+        return random.choice(messages).format(player=player, quest_name=row.get('Task_Name'), date=date)
 
-if df_recents.empty:
-    st.warning("No recent achievement data could be loaded. The ETL pipeline may not have run yet.")
+    return f"🏆 On {date}, {player} achieved: {row.get('Content', 'something noteworthy!')}"
+
+# --- Main Page ---
+st.title("🏆 Recent Achievements")
+st.markdown("A live feed of the latest and greatest accomplishments from across the clan.")
+
+df_achievements = Streamlit_utils.load_table("recent_achievements")
+texts = load_texts()
+
+if df_achievements.empty:
+    st.warning("No recent achievements could be loaded. The ETL pipeline may not have run yet.")
 else:
-    # Ensure Timestamp is in datetime format
-    df_recents['Timestamp'] = pd.to_datetime(df_recents['Timestamp'], errors='coerce', utc=True)
-    df_recents.dropna(subset=['Timestamp'], inplace=True)
-
-    # Loop through the configuration and display each section
-    for key, config in ACHIEVEMENT_CONFIG.items():
-        display_section(df_recents, config)
+    limit = st.sidebar.slider(
+        "Achievements to show per category:",
+        min_value=1,
+        max_value=25,
+        value=5,
+        step=1
+    )
+    
+    st.markdown("---")
+    
+    # Define the order of sections
+    section_order = [
+        "Maxed Skill (99)",
+        "Maxed Combat",
+        "Pet",
+        "Level Up",
+        "Combat Task",
+        "Diary",
+        "Quest",
+        "Combat Achievement Tier"
+    ]
+    
+    available_types = df_achievements['Broadcast_Type'].unique()
+    
+    for ach_type in section_order:
+        if ach_type in available_types:
+            st.subheader(ach_type)
+            df_section = df_achievements[df_achievements['Broadcast_Type'] == ach_type].head(limit)
+            
+            if df_section.empty:
+                st.info(f"No recent '{ach_type}' achievements to display.")
+            else:
+                for index, row in df_section.iterrows():
+                    achievement_message = format_achievement(row, texts)
+                    st.info(achievement_message)
+            st.markdown("---")
