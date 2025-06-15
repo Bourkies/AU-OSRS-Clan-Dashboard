@@ -5,6 +5,9 @@ import pandas as pd
 import random
 import Streamlit_utils
 import toml
+from pathlib import Path
+
+current_script_directory = Path(__file__).resolve().parent
 
 st.set_page_config(page_title="Personal Bests", page_icon="⏱️", layout="wide")
 
@@ -12,7 +15,7 @@ st.set_page_config(page_title="Personal Bests", page_icon="⏱️", layout="wide
 def load_texts():
     """Loads text snippets from the TOML file."""
     try:
-        return toml.load('dashboard_texts.toml')
+        return toml.load(current_script_directory.parent / 'dashboard_texts.toml')
     except Exception as e:
         st.error(f"Failed to load dashboard_texts.toml: {e}")
         return {}
@@ -26,8 +29,10 @@ def display_hall_of_fame(df_pbs, texts):
         st.info("No all-time records found to determine the biggest sweats.")
         return
     
-    # Explode holders for records held by multiple people (e.g., "Player A & Player B")
-    all_holders = df_pbs['Holder'].dropna().str.split(r'\s*&\s*').explode().str.strip()
+    # Explode holders for records held by multiple people.
+    # The 'Holder' column is a comma-separated string, e.g., "Player A, Player B".
+    # We split by comma, explode into separate rows, and then strip whitespace.
+    all_holders = df_pbs['Holder'].dropna().str.split(',').explode().str.strip()
     
     sweatiest_count = page_texts.get('sweatiest_players_count', 3)
     top_players = all_holders.value_counts().nlargest(sweatiest_count)
@@ -48,7 +53,7 @@ def display_hall_of_fame(df_pbs, texts):
 
 # --- Main Page ---
 st.title("⏱️ Personal Bests")
-st.markdown("This board shows the fastest all-time records achieved by clan members for various bosses and activities.")
+st.markdown("This board shows the fastest all-time records achieved by clan members for various bosses and activities. For group records, all members who achieved the time together are listed.")
 
 df_pbs = Streamlit_utils.load_table("personal_bests_summary")
 texts = load_texts()
@@ -67,7 +72,7 @@ else:
         df_pbs,
         column_config={
             "Task": "Task",
-            "Holder": "Record Holder",
+            "Holder": "Record Holder(s)",
             "Time": "Time",
             "Date": st.column_config.DateColumn("Date Achieved", format="YYYY-MM-DD")
         },
