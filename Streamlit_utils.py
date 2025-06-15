@@ -5,41 +5,74 @@ import streamlit as st
 import pandas as pd
 from st_supabase_connection import SupabaseConnection
 from datetime import datetime, timedelta, timezone
+from sqlalchemy import create_engine, text
+from pathlib import Path
+import toml
 
 @st.cache_resource
 def init_connection():
     """
-    Initializes a connection to the Supabase database.
+    Initializes a connection to the database based on the .streamlit/secrets.toml setting.
     """
-    try:
-        url = st.secrets["connections"]["supabase"]["url"]
-        key = st.secrets["connections"]["supabase"]["key"]
-        return st.connection("supabase", type=SupabaseConnection, url=url, key=key)
-    except Exception as e:
-        st.error(f"Failed to initialize Supabase connection: {e}. Check .streamlit/secrets.toml")
-        return None
+    data_source = st.secrets.get("data_source", "Online (Production)")
+
+    if data_source == 'Online (Production)':
+        try:
+            # These secrets are expected in .streamlit/secrets.toml
+            url = st.secrets["connections"]["supabase"]["url"]
+            key = st.secrets["connections"]["supabase"]["key"]
+            if "YOUR_SUPABASE_URL_HERE" in url:
+                st.error("Supabase URL is not configured in .streamlit/secrets.toml")
+                return None
+            return st.connection("supabase", type=SupabaseConnection, url=url, key=key)
+        except Exception as e:
+            st.error(f"Failed to initialize Supabase connection: {e}. Check .streamlit/secrets.toml")
+            return None
+    elif data_source == 'Local (Development)':
+        try:
+            # The path in secrets.toml is relative to the ETL project root
+            db_relative_path = st.secrets.get("local_db_path", "data/optimised_data.db")
+            # The script runs from the Dashboard folder, so we go up one level then into the ETL folder
+            local_db_path = Path(__file__).parent.parent / "ETL" / db_relative_path
+            
+            if not local_db_path.exists():
+                st.error(f"Local database file not found at the resolved path: {local_db_path}")
+                return None
+
+            engine = create_engine(f"sqlite:///{local_db_path.resolve()}")
+            return engine
+        except Exception as e:
+            st.error(f"Failed to initialize local SQLite connection: {e}")
+            return None
+    return None
 
 @st.cache_data(ttl=300)
 def load_table(table_name: str) -> pd.DataFrame:
     """
-    Loads an entire pre-aggregated table from the database.
+    Loads an entire pre-aggregated table from the selected database.
     """
     conn = init_connection()
     if conn is None: 
         st.error("Database connection is not available.")
         return pd.DataFrame()
 
+    data_source = st.secrets.get("data_source", "Online (Production)")
+
     try:
-        response = conn.client.table(table_name).select("*").execute()
-        df = pd.DataFrame(response.data)
+        if data_source == 'Online (Production)':
+            response = conn.client.table(table_name).select("*").execute()
+            df = pd.DataFrame(response.data)
+        else: # Local (Development)
+            df = pd.read_sql_table(table_name, conn)
+
         if 'Timestamp' in df.columns:
             df['Timestamp'] = pd.to_datetime(df['Timestamp'], errors='coerce', utc=True)
         return df
     except Exception as e:
-        if "relation" in str(e) and "does not exist" in str(e):
-            st.warning(f"Table '{table_name}' not found. The ETL might not have run for it yet.")
+        if "relation" in str(e) and "does not exist" in str(e) or "no such table" in str(e).lower():
+            st.warning(f"Table '{table_name}' not found in '{data_source}' source. The ETL might not have run for it yet.")
         else:
-            st.error(f"Error loading table '{table_name}': {e}")
+            st.error(f"Error loading table '{table_name}' from '{data_source}': {e}")
         return pd.DataFrame()
 
 @st.cache_data(ttl=300)
@@ -99,13 +132,17 @@ def get_chart_data_for_period(df_timeseries, selected_period_label, dashboard_co
 
     if period_suffix == 'Custom_Days':
         custom_days = int(dashboard_config.get('custom_lookback_days', 14))
-        target_freq = '6H' if value_to_chart == 'Value' else 'D'
+        target_freq = '6H' if custom_days <=14 else 'D'
         start_date = (run_time - timedelta(days=custom_days)).replace(hour=0, minute=0, second=0, microsecond=0)
         end_date = run_time
     elif period_suffix == 'Prev_Week':
         target_freq = 'D'
-        days_since_monday = run_time.weekday()
-        start_of_current_week = (run_time - timedelta(days=days_since_monday)).replace(hour=0, minute=0, second=0, microsecond=0)
+        week_start_day_name = dashboard_config.get('week_start_day', 'Monday')
+        weekday_map = {'Monday': 0, 'Tuesday': 1, 'Wednesday': 2, 'Thursday': 3, 'Friday': 4, 'Saturday': 5, 'Sunday': 6}
+        week_start_day_num = weekday_map.get(week_start_day_name, 0)
+        
+        days_since_week_start = (run_time.weekday() - week_start_day_num + 7) % 7
+        start_of_current_week = (run_time - timedelta(days=days_since_week_start)).replace(hour=0, minute=0, second=0, microsecond=0)
         end_date = start_of_current_week
         start_date = end_date - timedelta(days=7)
     elif period_suffix == 'Prev_Month':
@@ -122,7 +159,8 @@ def get_chart_data_for_period(df_timeseries, selected_period_label, dashboard_co
     if not target_freq: return pd.DataFrame()
 
     df_filtered_by_freq = df_timeseries[df_timeseries['Frequency'] == target_freq].copy()
-    if df_filtered_by_freq.empty: return pd.DataFrame()
+    if df_filtered_by_freq.empty:
+        return pd.DataFrame()
 
     df_filtered_by_freq['Date'] = pd.to_datetime(df_filtered_by_freq['Date'], utc=True)
     df_filtered_by_freq.sort_values('Date', inplace=True)
@@ -130,6 +168,7 @@ def get_chart_data_for_period(df_timeseries, selected_period_label, dashboard_co
     if period_suffix == 'All_Time':
         df_all_time = df_filtered_by_freq.copy()
         df_all_time['Value'] = df_all_time[cumulative_col]
+        
         if not df_all_time.empty:
             first_date = df_all_time.iloc[0]['Date']
             zero_date = first_date - timedelta(days=7)
@@ -139,7 +178,11 @@ def get_chart_data_for_period(df_timeseries, selected_period_label, dashboard_co
 
     df_before_period = df_filtered_by_freq[df_filtered_by_freq['Date'] < start_date]
     start_value = df_before_period.iloc[-1][cumulative_col] if not df_before_period.empty else 0
+    
     df_in_period = df_filtered_by_freq[(df_filtered_by_freq['Date'] >= start_date) & (df_filtered_by_freq['Date'] < end_date)].copy()
+    
     df_in_period['Value'] = df_in_period[cumulative_col] - start_value
+    
     zero_row = pd.DataFrame([{'Date': start_date, 'Value': 0}])
+    
     return pd.concat([zero_row, df_in_period[['Date', 'Value']]], ignore_index=True)
