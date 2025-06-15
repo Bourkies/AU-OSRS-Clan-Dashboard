@@ -3,6 +3,7 @@
 import streamlit as st
 import pandas as pd
 import Streamlit_utils
+from pathlib import Path
 
 st.set_page_config(page_title="Clan Collection Log", page_icon="📜", layout="wide")
 

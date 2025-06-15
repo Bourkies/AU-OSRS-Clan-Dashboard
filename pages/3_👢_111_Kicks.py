@@ -6,6 +6,9 @@ import Streamlit_utils
 import random
 import toml
 from datetime import datetime, timezone
+from pathlib import Path
+
+current_script_directory = Path(__file__).resolve().parent
 
 st.set_page_config(page_title="111 Kicks", page_icon="👢", layout="wide")
 
@@ -15,7 +18,7 @@ st.set_page_config(page_title="111 Kicks", page_icon="👢", layout="wide")
 def load_texts():
     """Loads text snippets from the TOML file."""
     try:
-        return toml.load('dashboard_texts.toml')
+        return toml.load(current_script_directory.parent / 'dashboard_texts.toml')
     except Exception as e:
         st.error(f"Failed to load dashboard_texts.toml: {e}")
         return {}

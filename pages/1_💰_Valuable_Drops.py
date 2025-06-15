@@ -9,6 +9,8 @@ import toml
 from pathlib import Path
 from datetime import datetime, timedelta, timezone
 
+current_script_directory = Path(__file__).resolve().parent
+
 st.set_page_config(page_title="Valuable Drops", page_icon="💰", layout="wide")
 
 # --- Helper functions for this page ---
@@ -17,7 +19,7 @@ st.set_page_config(page_title="Valuable Drops", page_icon="💰", layout="wide")
 def load_texts():
     """Loads text snippets from the TOML file."""
     try:
-        texts_path = 'dashboard_texts.toml'
+        texts_path = current_script_directory.parent / 'dashboard_texts.toml'
         return toml.load(texts_path)
     except FileNotFoundError:
         st.error(f"Error: `dashboard_texts.toml` not found at expected path '{texts_path}'. Please ensure the file exists in the project root directory.")
