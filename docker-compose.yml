@@ -20,7 +20,7 @@ services:
       # IMPORTANT: You MUST replace the path on the left with the ACTUAL,
       # ABSOLUTE filesystem path to your database file. Based on your structure,
       # it will be something like this. Use the 'pwd' command to be sure.
-      - /home/pi/projects/AU-OSRS-Dashboard/ETL/data/optimised_data.db:/data/optimised_data.db:ro
+      - /home/bourke/projects/AU-OSRS-Dashboard/ETL/data/optimised_data.db:/data/optimised_data.db:ro
 
     # Environment variables for Streamlit Secrets.
     # These override any values in your secrets.toml file.
