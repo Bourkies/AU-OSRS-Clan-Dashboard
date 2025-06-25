@@ -18,25 +18,27 @@ def init_connection():
 
     if data_source == 'Online (Production)':
         try:
-            # These secrets are expected in .streamlit/secrets.toml
+            # These secrets are expected in .streamlit/secrets.toml or environment variables
             url = st.secrets["connections"]["supabase"]["url"]
             key = st.secrets["connections"]["supabase"]["key"]
-            if "YOUR_SUPABASE_URL_HERE" in url:
-                st.error("Supabase URL is not configured in .streamlit/secrets.toml")
-                return None
             return st.connection("supabase", type=SupabaseConnection, url=url, key=key)
         except Exception as e:
-            st.error(f"Failed to initialize Supabase connection: {e}. Check .streamlit/secrets.toml")
+            st.error(f"Failed to initialize Supabase connection: {e}. Check secrets.")
             return None
     elif data_source == 'Local (Development)':
         try:
-            # The path in secrets.toml is relative to the ETL project root
-            db_relative_path = st.secrets.get("local_db_path", "data/optimised_data.db")
-            # The script runs from the Dashboard folder, so we go up one level then into the ETL folder
-            local_db_path = Path(__file__).parent.parent / "ETL" / db_relative_path
+            # Get the database path directly from secrets (set by environment variable).
+            # This is more robust for Docker environments.
+            local_db_path_str = st.secrets.get("local_db_path")
             
+            if not local_db_path_str:
+                st.error("Local database path is not configured. Set 'local_db_path' in secrets or ST_LOCAL_DB_PATH as an environment variable.")
+                return None
+            
+            local_db_path = Path(local_db_path_str)
+
             if not local_db_path.exists():
-                st.error(f"Local database file not found at the resolved path: {local_db_path}")
+                st.error(f"Local database file not found at the container path: {local_db_path}")
                 return None
 
             engine = create_engine(f"sqlite:///{local_db_path.resolve()}")
