@@ -8,31 +8,32 @@ from datetime import datetime, timedelta, timezone
 from sqlalchemy import create_engine, text
 from pathlib import Path
 import toml
+import os # <-- Import the 'os' module
 
 @st.cache_resource
 def init_connection():
     """
-    Initializes a connection to the database based on the .streamlit/secrets.toml setting.
+    Initializes a connection to the database based on environment variables.
     """
-    data_source = st.secrets.get("data_source", "Online (Production)")
+    # Use os.environ.get() for a more direct way to read environment variables
+    data_source = os.environ.get("DATA_SOURCE", "Online (Production)")
 
     if data_source == 'Online (Production)':
         try:
-            # These secrets are expected in .streamlit/secrets.toml or environment variables
-            url = st.secrets["connections"]["supabase"]["url"]
-            key = st.secrets["connections"]["supabase"]["key"]
+            # These secrets are now expected as environment variables
+            url = os.environ.get("SUPABASE_URL")
+            key = os.environ.get("SUPABASE_KEY")
             return st.connection("supabase", type=SupabaseConnection, url=url, key=key)
         except Exception as e:
-            st.error(f"Failed to initialize Supabase connection: {e}. Check secrets.")
+            st.error(f"Failed to initialize Supabase connection: {e}. Check environment variables.")
             return None
     elif data_source == 'Local (Development)':
         try:
-            # Get the database path directly from secrets (set by environment variable).
-            # This is more robust for Docker environments.
-            local_db_path_str = st.secrets.get("local_db_path")
+            # Get the database path directly from environment variables
+            local_db_path_str = os.environ.get("LOCAL_DB_PATH")
             
             if not local_db_path_str:
-                st.error("Local database path is not configured. Set 'local_db_path' in secrets or ST_LOCAL_DB_PATH as an environment variable.")
+                st.error("LOCAL_DB_PATH environment variable is not set.")
                 return None
             
             local_db_path = Path(local_db_path_str)
@@ -48,6 +49,7 @@ def init_connection():
             return None
     return None
 
+# The rest of the functions remain the same
 @st.cache_data(ttl=300)
 def load_table(table_name: str) -> pd.DataFrame:
     """
@@ -58,7 +60,7 @@ def load_table(table_name: str) -> pd.DataFrame:
         st.error("Database connection is not available.")
         return pd.DataFrame()
 
-    data_source = st.secrets.get("data_source", "Online (Production)")
+    data_source = os.environ.get("DATA_SOURCE", "Online (Production)")
 
     try:
         if data_source == 'Online (Production)':
