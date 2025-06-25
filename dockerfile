@@ -11,6 +11,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
+# Add this line to create the .streamlit directory and an empty secrets file
+# This ensures Streamlit's secrets management can initialize correctly
+RUN mkdir -p .streamlit && touch .streamlit/secrets.toml
+
 # Copy the requirements file first to leverage Docker's layer caching
 # CORRECTED PATH: The file is in the root of the build context.
 COPY requirements.txt .
