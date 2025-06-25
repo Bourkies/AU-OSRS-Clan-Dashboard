@@ -1,32 +1,18 @@
 version: '3.8'
 
 services:
-  # Define the service for your Streamlit application
   au-osrs-dashboard:
-    build: . # Build the Docker image from the Dockerfile in the current directory
-    image: au-osrs-dashboard:latest # Name the built image
+    build: .
+    image: au-osrs-dashboard:latest
     restart: unless-stopped
     container_name: au-osrs-dashboard
-
-    # Port Mapping: Exposes the container's port 8501 only to the Pi's
-    # localhost interface for the Cloudflare Tunnel to connect to.
     ports:
-    # - "127.0.0.1:8501:8501" # cloudflare Tunnel
-     - "8501:8501" # Home testing
-
-    # Volume Mapping (Bind Mount): This is the key change.
-    # It maps your actual database file on the Raspberry Pi host to a fixed
-    # path inside the container.
+      # Use "8501:8501" for LAN testing or "127.0.0.1:8501:8501" for secure Cloudflare deployment
+      - "8501:8501"
     volumes:
-      # IMPORTANT: You MUST replace the path on the left with the ACTUAL,
-      # ABSOLUTE filesystem path to your database file. Based on your structure,
-      # it will be something like this. Use the 'pwd' command to be sure.
-      - /home/pi/projects/AU-OSRS-Dashboard/ETL/data/optimised_data.db:/data/optimised_data.db:ro
-
-    # Environment variables for Streamlit Secrets.
-    # These override any values in your secrets.toml file.
+      # Replace with the absolute path to your database file on the Pi
+      - /home/bourke/projects/AU-OSRS-Dashboard/ETL/data/optimised_data.db:/data/optimised_data.db:ro
     environment:
-      # Tell the app to use the local connection logic
-      - ST_DATA_SOURCE=Local (Development)
-      # Provide the absolute path to the database *inside the container*
-      - ST_LOCAL_DB_PATH=/data/optimised_data.db
+      # Set the environment variables for the app to read directly
+      - DATA_SOURCE=Local (Development)
+      - LOCAL_DB_PATH=/data/optimised_data.db
