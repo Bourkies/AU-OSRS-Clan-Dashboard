@@ -1,0 +1,20 @@
+# .gitignore
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Local secrets file from Streamlit
+# While our Docker setup doesn't rely on it for production,
+# it's good practice to ignore it in case you put real keys there.
+.streamlit/secrets.toml
+
+# The actual SQLite database file
+*.db
+*.db-journal
+
+# Environment files for Docker
+.env
+
+# VS Code settings
+.vscode/
