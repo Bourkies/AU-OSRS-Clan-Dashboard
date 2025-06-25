@@ -21,7 +21,7 @@ st.set_page_config(
 st.title("🇦🇺 AU OSRS Clan Dashboard 🇦🇺")
 
 # --- Display Data Source and Last Updated Time in Sidebar ---
-data_source = st.secrets.get("data_source", "Online (Production)")
+data_source = os.environ.get("DATA_SOURCE", "Online (Production)")
 
 st.sidebar.title("Dashboard Info")
 if data_source == 'Online (Production)':
@@ -86,3 +86,4 @@ st.markdown("""
 """)
 
 st.info("**Work In Progress:** This preview is a work in progress! Please contact the admin team to provide feedback or contribute to the project", icon="💡")
+
