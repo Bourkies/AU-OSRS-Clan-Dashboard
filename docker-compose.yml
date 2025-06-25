@@ -8,7 +8,7 @@ services:
     container_name: au-osrs-dashboard
     ports:
       # Use "8501:8501" for LAN testing or "127.0.0.1:8501:8501" for secure Cloudflare deployment
-      - "8501:8501"
+      - "127.0.0.1:8501:8501"
     volumes:
       # Replace with the absolute path to your database file on the Pi
       - /home/bourke/projects/AU-OSRS-Dashboard/ETL/data/optimised_data.db:/data/optimised_data.db:ro
