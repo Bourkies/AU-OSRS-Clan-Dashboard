@@ -24,22 +24,23 @@ st.title("🇦🇺 AU OSRS Clan Dashboard 🇦🇺")
 data_source = os.environ.get("DATA_SOURCE", "Online (Production)")
 
 st.sidebar.title("Dashboard Info")
-if data_source == 'Online (Production)':
-    last_updated_utc = Streamlit_utils.get_last_updated_timestamp()
-    if last_updated_utc:
-        last_updated_str = last_updated_utc.strftime('%d %b %Y, %H:%M UTC')
-        st.sidebar.success(f"**Data Source:** Online\n\n**Last Updated:** {last_updated_str}", icon="✅")
-    else:
-        st.sidebar.warning("Data Source: Online\n\nLast updated time not available.", icon="⚠️")
-else:
-    db_relative_path = st.secrets.get("local_db_path", "data/optimised_data.db")
-    local_db_path = Path(__file__).parent.parent / "ETL" / db_relative_path
-    db_mod_time_str = "Not found"
-    if os.path.exists(local_db_path):
-        db_mod_time = os.path.getmtime(local_db_path)
-        db_mod_time_str = datetime.fromtimestamp(db_mod_time).strftime('%d %b %Y, %H:%M')
+last_updated_utc = Streamlit_utils.get_last_updated_timestamp()
 
-    st.sidebar.info(f"**Data Source:** Local DB\n\n**DB Last Modified:** {db_mod_time_str}", icon="💻")
+if last_updated_utc:
+    # Format the timestamp for display
+    last_updated_str = last_updated_utc.strftime('%d %b %Y, %H:%M UTC')
+    
+    # Display a different message based on the data source
+    if data_source == 'Online (Production)':
+        st.sidebar.success(f"**Data Source:** Online\n\n**Last Updated:** {last_updated_str}", icon="✅")
+    else: # Local (Development)
+        st.sidebar.info(f"**Data Source:** Local DB\n\n**Last Updated:** {last_updated_str}", icon="💻")
+else:
+    # Fallback message if the timestamp can't be found
+    if data_source == 'Online (Production)':
+        st.sidebar.warning("Data Source: Online\n\nLast updated time not available.", icon="⚠️")
+    else:
+        st.sidebar.warning("Data Source: Local DB\n\nCould not read last updated time from `run_metadata` table.", icon="⚠️")
 
 st.sidebar.markdown("---")
 
@@ -54,7 +55,7 @@ st.markdown("""
 - Remove Duplicate data/Set a date for data collection to start (13/6/25 best day to start)
 - Correctly set the clan clog previous data and group correctly
 - Fix big H small h issue is ELT pipeline
-- Add slider to each page for number of MVP’s to display
+- Add slider to each page for number of MVP's to display
 """)
 
 st.markdown("---")
@@ -86,4 +87,3 @@ st.markdown("""
 """)
 
 st.info("**Work In Progress:** This preview is a work in progress! Please contact the admin team to provide feedback or contribute to the project", icon="💡")
-
