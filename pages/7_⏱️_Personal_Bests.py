@@ -47,7 +47,7 @@ def display_hall_of_fame(df_pbs, texts):
     for i, (player, count) in enumerate(top_players.items()):
         if messages:
             message = messages[i % len(messages)].format(player=player, count=count)
-            st.success(message, icon="⭐")
+            st.success(message)
         else:
              st.success(f"**{player}** holds **{count}** record(s)!", icon="⭐")
 
