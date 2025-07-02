@@ -33,6 +33,8 @@ def display_hall_of_fame(df_pbs, texts):
         return
     
     all_holders = df_pbs['Holder'].dropna().str.split(',').explode().str.strip()
+    # MODIFICATION: Filter out empty strings so they are not counted as a record holder.
+    all_holders = all_holders[all_holders != '']
     
     sweatiest_count = page_texts.get('sweatiest_players_count', 3)
     top_players = all_holders.value_counts().nlargest(sweatiest_count)
@@ -57,6 +59,9 @@ def create_record_holder_table(df_pbs):
         return pd.DataFrame()
         
     all_holders = df_pbs['Holder'].dropna().str.split(',').explode().str.strip()
+    # MODIFICATION: Filter out empty strings so they are not counted as a record holder.
+    all_holders = all_holders[all_holders != '']
+    
     holder_counts = all_holders.value_counts().reset_index()
     holder_counts.columns = ['Record Holder', 'Records Held']
     return holder_counts.sort_values(by='Records Held', ascending=False)
