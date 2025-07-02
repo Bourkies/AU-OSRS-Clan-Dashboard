@@ -49,7 +49,7 @@ def display_hall_of_fame(df_pbs, texts):
             message = messages[i % len(messages)].format(player=player, count=count)
             st.success(message, icon="⭐")
         else:
-             st.success(f"⭐ **{player}** holds **{count}** record(s)!", icon="⭐")
+             st.success(f"**{player}** holds **{count}** record(s)!", icon="⭐")
 
 # --- Main Page ---
 st.title("⏱️ Personal Bests")
