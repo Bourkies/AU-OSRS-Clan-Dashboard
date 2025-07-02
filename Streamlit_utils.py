@@ -7,20 +7,21 @@ from st_supabase_connection import SupabaseConnection
 from datetime import datetime, timedelta, timezone
 from sqlalchemy import create_engine, text
 from pathlib import Path
-import toml
-import os # <-- Import the 'os' module
+try:
+    import tomllib
+except ImportError:
+    import tomli as tomllib
+import os
 
 @st.cache_resource
 def init_connection():
     """
     Initializes a connection to the database based on environment variables.
     """
-    # Use os.environ.get() for a more direct way to read environment variables
     data_source = os.environ.get("DATA_SOURCE", "Online (Production)")
 
     if data_source == 'Online (Production)':
         try:
-            # These secrets are now expected as environment variables
             url = os.environ.get("SUPABASE_URL")
             key = os.environ.get("SUPABASE_KEY")
             return st.connection("supabase", type=SupabaseConnection, url=url, key=key)
@@ -29,7 +30,6 @@ def init_connection():
             return None
     elif data_source == 'Local (Development)':
         try:
-            # Get the database path directly from environment variables
             local_db_path_str = os.environ.get("LOCAL_DB_PATH")
             
             if not local_db_path_str:
@@ -49,7 +49,6 @@ def init_connection():
             return None
     return None
 
-# The rest of the functions remain the same
 @st.cache_data(ttl=300)
 def load_table(table_name: str) -> pd.DataFrame:
     """
