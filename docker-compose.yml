@@ -10,9 +10,10 @@ services:
       # Use "8501:8501" for LAN testing or "127.0.0.1:8501:8501" for secure Cloudflare deployment
       - "127.0.0.1:8501:8501"
     volumes:
-      # Replace with the absolute path to your database file on the Pi
-      - /home/bourke/projects/AU-OSRS-Dashboard/OSRS-Dashboard-ELT/data/optimised_data.db:/data/optimised_data.db:ro
+      # Mount the entire directory containing the database file, not just the file itself.
+      # This ensures the container sees the new file when the ETL replaces it.
+      - /home/bourke/projects/AU-OSRS-Dashboard/OSRS-Dashboard-ELT/data:/data:ro
     environment:
-      # Set the environment variables for the app to read directly
+      # The environment variables are still correct and point to the file inside the container.
       - DATA_SOURCE=Local (Development)
       - LOCAL_DB_PATH=/data/optimised_data.db
