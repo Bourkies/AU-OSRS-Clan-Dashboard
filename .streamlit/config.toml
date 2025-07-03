@@ -1,3 +1,7 @@
+[client]
+showErrorDetails = "none"
+toolbarMode = "viewer"
+
 [theme]
 # A custom Green, Gold, and Blue theme.
 primaryColor="#D4AF37"
