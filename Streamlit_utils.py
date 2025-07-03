@@ -13,7 +13,7 @@ except ImportError:
     import tomli as tomllib
 import os
 
-@st.cache_resource
+@st.cache_resource(ttl=300)
 def init_connection():
     """
     Initializes a connection to the database based on environment variables.
