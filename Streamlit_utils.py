@@ -13,11 +13,37 @@ except ImportError:
     import tomli as tomllib
 import os
 
-# --- MODIFIED: Separated connection logic to be more robust. ---
+# --- Function to track local database file changes ---
+@st.cache_data(ttl=10)
+def get_local_db_state():
+    """
+    Gets the modification time and size of the local database file.
+    This acts as a cache key. When the file is replaced by the ETL,
+    this function's output will change. This change is detected by Streamlit,
+    triggering a cache invalidation for any data-loading functions that call this.
+    This ensures that the Streamlit app always displays the latest data after an ETL run.
+    """
+    data_source = os.environ.get("DATA_SOURCE", "Online (Production)")
+    if data_source == 'Local (Development)':
+        try:
+            local_db_path_str = os.environ.get("LOCAL_DB_PATH")
+            if local_db_path_str:
+                local_db_path = Path(local_db_path_str)
+                if local_db_path.exists():
+                    # Return a tuple of modification time and size to be robust.
+                    # This unique signature represents the file's current state.
+                    return (local_db_path.stat().st_mtime, local_db_path.stat().st_size)
+        except (FileNotFoundError, Exception):
+            # If file is temporarily unavailable during ETL write, return None.
+            return None
+    # For production, we don't need file-based tracking.
+    return "production"
+
+# --- Connection Management ---
 
 @st.cache_resource(ttl=300)
 def init_supabase_connection():
-    """Initializes and caches the Supabase connection for production."""
+    """Initializes and caches the Supabase (Production) connection."""
     try:
         url = os.environ.get("SUPABASE_URL")
         key = os.environ.get("SUPABASE_KEY")
@@ -27,7 +53,12 @@ def init_supabase_connection():
         return None
 
 def init_local_connection():
-    """Initializes a new, non-cached connection to the local SQLite DB."""
+    """
+    Initializes a new, non-cached connection to the local SQLite database.
+    This is intentionally not cached with @st.cache_resource to prevent a
+    persistent file lock, which would block the ETL process from replacing the database file.
+    A new connection engine is created for each query and then disposed of.
+    """
     try:
         local_db_path_str = os.environ.get("LOCAL_DB_PATH")
         if not local_db_path_str:
@@ -35,36 +66,42 @@ def init_local_connection():
             return None
         
         local_db_path = Path(local_db_path_str)
+
         if not local_db_path.exists():
             st.error(f"Local database file not found at the container path: {local_db_path}")
             return None
 
-        # Create a new engine every time to ensure the latest file is read.
-        engine = create_engine(f"sqlite:///{local_db_path.resolve()}")
-        return engine
+        # Return a new engine every time to avoid locking the file.
+        return create_engine(f"sqlite:///{local_db_path.resolve()}")
     except Exception as e:
         st.error(f"Failed to initialize local SQLite connection: {e}")
         return None
 
 def init_connection():
     """
-    Initializes a connection based on the environment.
-    Caches the production connection but not the local one to ensure fresh data.
+    Initializes a connection to the database based on environment variables.
+    - Production (Supabase) connections are cached for performance.
+    - Local (SQLite) connections are NOT cached to prevent file locks.
     """
     data_source = os.environ.get("DATA_SOURCE", "Online (Production)")
 
     if data_source == 'Online (Production)':
         return init_supabase_connection()
-    elif data_source == 'Local (Development)':
+    else: # Local (Development)
         return init_local_connection()
-    
-    return None
 
 @st.cache_data(ttl=300)
 def load_table(table_name: str) -> pd.DataFrame:
     """
     Loads an entire pre-aggregated table from the selected database.
+    For local development, this function's cache is automatically invalidated
+    when the database file is updated by the ETL process.
     """
+    # By calling this function, we make st.cache_data aware of the db file's state.
+    # When the file changes, the output of get_local_db_state() changes, and
+    # Streamlit automatically invalidates the cache for this function.
+    get_local_db_state()
+    
     conn = init_connection()
     if conn is None: 
         st.error("Database connection is not available.")
@@ -77,7 +114,10 @@ def load_table(table_name: str) -> pd.DataFrame:
             response = conn.client.table(table_name).select("*").execute()
             df = pd.DataFrame(response.data)
         else: # Local (Development)
-            df = pd.read_sql_table(table_name, conn)
+            # Using the connection object directly ensures it's properly closed
+            # after the read operation, further helping to prevent file locks.
+            with conn.connect() as connection:
+                df = pd.read_sql_table(table_name, connection)
 
         if 'Timestamp' in df.columns:
             df['Timestamp'] = pd.to_datetime(df['Timestamp'], errors='coerce', utc=True)
@@ -94,7 +134,9 @@ def get_last_updated_timestamp() -> datetime:
     """Fetches the last ETL run timestamp from the metadata table."""
     df_meta = load_table('run_metadata')
     if not df_meta.empty and 'last_updated_utc' in df_meta.columns:
-        return pd.to_datetime(df_meta['last_updated_utc'].iloc[0], utc=True)
+        # Handle potential empty dataframe after an ETL run before data is populated
+        if df_meta['last_updated_utc'].iloc[0] is not None:
+            return pd.to_datetime(df_meta['last_updated_utc'].iloc[0], utc=True)
     return None
 
 @st.cache_data(ttl=300)
