@@ -88,18 +88,23 @@ else:
 st.sidebar.markdown("---")
 
 
-st.info("**This is a preview**, some data maybe incorrect or fail to display. This project is a work in progress!", icon="💡")
-st.error("TO DO:")
-st.markdown("""
-- Verify data
-- Replace AI place holder text on all pages
-- Re order and correct titles on pages
-- Other improvements, changes and additions PLEASE SHARE FEED BACK!
-- Correctly set the clan clog previous data and group correctly
-- Add slider to each page for number of MVP's to display
-- last 14 day tables not loading
-""")
+st.info("**🚧This is a preview**: This project is a work in progress and some data may be incorrect.🚧")
 
+# Use an expander for the To-Do list to keep the main page clean.
+with st.expander("📝 View Preview To-Do List & Known Issues"):
+    st.markdown("""
+    - Verify data
+    - Replace AI placeholder text on all pages
+    - Re-order and correct titles on pages
+    - Correctly set the clan clog previous data and group correctly
+    - Add slider to each page for number of MVPs to display
+    - Fix `last 14 day` tables not loading
+    - Fix Valuable Drops page incorrectly summing drops      
+    - Offical launch!
+                                   
+    """)
+
+st.info("Found a bug or have an idea? contact ScuffedBorks, the admin team or [**Create an issue on GitHub!**](https://github.com/Bourkies/AU-OSRS-Clan-Dashboard/issues) 💡", icon="🛠️")
 st.markdown("---")
 
 # Use columns to center and constrain the image width
@@ -130,4 +135,5 @@ st.markdown("""
 """)
 
 st.info("**Work In Progress:** This preview is a work in progress! Please contact the admin team to provide feedback or contribute to the project", icon="💡")
+
 
