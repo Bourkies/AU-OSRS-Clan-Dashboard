@@ -13,40 +13,51 @@ except ImportError:
     import tomli as tomllib
 import os
 
+# --- MODIFIED: Separated connection logic to be more robust. ---
+
 @st.cache_resource(ttl=300)
+def init_supabase_connection():
+    """Initializes and caches the Supabase connection for production."""
+    try:
+        url = os.environ.get("SUPABASE_URL")
+        key = os.environ.get("SUPABASE_KEY")
+        return st.connection("supabase", type=SupabaseConnection, url=url, key=key)
+    except Exception as e:
+        st.error(f"Failed to initialize Supabase connection: {e}. Check environment variables.")
+        return None
+
+def init_local_connection():
+    """Initializes a new, non-cached connection to the local SQLite DB."""
+    try:
+        local_db_path_str = os.environ.get("LOCAL_DB_PATH")
+        if not local_db_path_str:
+            st.error("LOCAL_DB_PATH environment variable is not set.")
+            return None
+        
+        local_db_path = Path(local_db_path_str)
+        if not local_db_path.exists():
+            st.error(f"Local database file not found at the container path: {local_db_path}")
+            return None
+
+        # Create a new engine every time to ensure the latest file is read.
+        engine = create_engine(f"sqlite:///{local_db_path.resolve()}")
+        return engine
+    except Exception as e:
+        st.error(f"Failed to initialize local SQLite connection: {e}")
+        return None
+
 def init_connection():
     """
-    Initializes a connection to the database based on environment variables.
+    Initializes a connection based on the environment.
+    Caches the production connection but not the local one to ensure fresh data.
     """
     data_source = os.environ.get("DATA_SOURCE", "Online (Production)")
 
     if data_source == 'Online (Production)':
-        try:
-            url = os.environ.get("SUPABASE_URL")
-            key = os.environ.get("SUPABASE_KEY")
-            return st.connection("supabase", type=SupabaseConnection, url=url, key=key)
-        except Exception as e:
-            st.error(f"Failed to initialize Supabase connection: {e}. Check environment variables.")
-            return None
+        return init_supabase_connection()
     elif data_source == 'Local (Development)':
-        try:
-            local_db_path_str = os.environ.get("LOCAL_DB_PATH")
-            
-            if not local_db_path_str:
-                st.error("LOCAL_DB_PATH environment variable is not set.")
-                return None
-            
-            local_db_path = Path(local_db_path_str)
-
-            if not local_db_path.exists():
-                st.error(f"Local database file not found at the container path: {local_db_path}")
-                return None
-
-            engine = create_engine(f"sqlite:///{local_db_path.resolve()}")
-            return engine
-        except Exception as e:
-            st.error(f"Failed to initialize local SQLite connection: {e}")
-            return None
+        return init_local_connection()
+    
     return None
 
 @st.cache_data(ttl=300)
