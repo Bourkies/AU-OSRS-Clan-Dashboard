@@ -4,3 +4,4 @@ st-supabase-connection
 SQLAlchemy
 toml
 tomli
+streamlit-js-eval
