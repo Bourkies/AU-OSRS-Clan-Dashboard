@@ -7,6 +7,7 @@ import Streamlit_utils
 import toml
 from pathlib import Path
 import json
+import html
 
 # --- Page Configuration ---
 st.set_page_config(page_title="Personal Bests", page_icon="⏱️", layout="wide")
@@ -17,6 +18,7 @@ st.set_page_config(page_title="Personal Bests", page_icon="⏱️", layout="wide
 def load_texts():
     """Loads text snippets from the TOML file."""
     try:
+        # Adjust the path to correctly locate dashboard_texts.toml in the parent directory
         current_script_directory = Path(__file__).resolve().parent
         return toml.load(current_script_directory.parent / 'dashboard_texts.toml')
     except Exception as e:
@@ -46,12 +48,14 @@ def display_hall_of_fame(df_pbs, texts):
     messages = page_texts.get('sweatiest_players_messages', [])
     random.shuffle(messages)
 
+    cols = st.columns(len(top_players))
     for i, (player, count) in enumerate(top_players.items()):
-        if messages:
-            message = messages[i % len(messages)].format(player=player, count=count)
-            st.success(message)
-        else:
-             st.success(f"**{player}** holds **{count}** record(s)!", icon="⭐")
+        with cols[i]:
+            if messages:
+                message = messages[i % len(messages)].format(player=player, count=count)
+                st.success(message)
+            else:
+                 st.success(f"**{player}** holds **{count}** record(s)!", icon="⭐")
 
 def create_record_holder_table(df_pbs):
     """Creates a DataFrame of all record holders and their total record count from the provided dataframe."""
@@ -66,9 +70,117 @@ def create_record_holder_table(df_pbs):
     holder_counts.columns = ['Record Holder', 'Records Held']
     return holder_counts.sort_values(by='Records Held', ascending=False)
 
+def display_pb_card(task, holder, time, date):
+    """Returns the HTML for a single Personal Best record card."""
+    
+    unclaimed = time == "0:00" or not holder
+    card_class = "pb-card-unclaimed" if unclaimed else "pb-card"
+    
+    # Format holder string - now always shows all holders
+    holder_display = "Unclaimed" if unclaimed else holder
+
+    # Format date string
+    date_display = ""
+    if pd.notna(date):
+        try:
+            date_display = f"📅 {pd.to_datetime(date).strftime('%d %b %Y')}"
+        except (ValueError, TypeError):
+            date_display = "" # Keep it blank if date is invalid
+
+    # Escape content to prevent HTML injection or rendering errors
+    safe_task = html.escape(task)
+    safe_holder = html.escape(holder_display)
+    safe_time = html.escape(time.strip() if isinstance(time, str) else str(time))
+
+    # Return the HTML string as a single block to avoid introducing whitespace/indentation
+    # issues that can confuse Streamlit's HTML renderer.
+    return (
+        f'<div class="{card_class}">'
+        f'<h4>{safe_task}</h4>'
+        f'<div class="time">{safe_time}</div>'
+        f'<div class="holder">👤 {safe_holder}</div>'
+        f'<div class="date">{date_display}</div>'
+        f'</div>'
+    )
+
+
 # --- Main Page Logic ---
 st.title("⏱️ Personal Bests")
 st.markdown("This board shows the fastest records achieved by clan members. Got a missing record? Contact an admin to have it added!")
+st.info("The display is a work in progress")
+
+# --- Custom CSS for PB Cards ---
+st.markdown("""
+<style>
+    /* Grid container for responsive card layout */
+    .card-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 1rem;
+    }
+    .pb-card {
+        background-color: #004020; /* secondaryBackgroundColor */
+        border: 2px solid #D4AF37; /* primaryColor */
+        border-radius: 10px;
+        padding: 1rem;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
+        height: 220px; 
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-width: 340px;
+        max-width: 450px;
+    }
+    .pb-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    }
+    .pb-card-unclaimed {
+        background-color: #111e2b; /* Darker version of page background */
+        border: 2px solid #555;
+        border-radius: 10px;
+        padding: 1rem;
+        opacity: 0.7;
+        height: 220px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-width: 340px;
+        max-width: 450px;
+    }
+    .pb-card h4 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.15em;
+        color: #FFFFFF; /* textColor */
+        font-weight: bold;
+        text-align: center;
+        flex-grow: 1;
+        margin-bottom: -2rem;
+    }
+    .pb-card .time {
+        font-size: 2em;
+        font-weight: bold;
+        color: #D4AF37; /* primaryColor */
+        text-align: center;
+        margin-bottom: -1rem;
+    }
+    .pb-card-unclaimed .time {
+        color: #888;
+    }
+    .pb-card .holder, .pb-card .date {
+        font-size: 1.15em;
+        color: #FFFFFF; /* textColor */
+        text-align: center;
+    }
+    /* Style for the expander title */
+    div[data-testid="stExpander"] summary p {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 
 df_pbs = Streamlit_utils.load_table("personal_bests_summary")
 dashboard_config = Streamlit_utils.load_dashboard_config()
@@ -101,36 +213,35 @@ else:
     display_hall_of_fame(df_pbs, texts)
     st.markdown("---")
     
-    st.subheader("⏱️ Leaderboard")
-
     # --- Display each group and its records ---
     for group_name in groups_to_display:
-        st.subheader(group_name)
-        df_group = df_pbs[df_pbs['Group'] == group_name].copy()
-        
-        # --- Sort items within the group based on toggle ---
-        if not sort_items_alpha and group_name in item_orders:
-            # Apply config order
-            item_order_list = item_orders[group_name]
-            df_group['Task'] = pd.Categorical(df_group['Task'], categories=item_order_list, ordered=True)
-            df_group.sort_values('Task', inplace=True)
-        else:
-            # Apply alphabetical order
-            df_group.sort_values('Task', inplace=True)
+        # FIX: Use an expander for each group to prevent rendering issues
+        with st.expander(group_name, expanded=True):
+            df_group = df_pbs[df_pbs['Group'] == group_name].copy()
+            
+            # --- Sort items within the group based on toggle ---
+            if not sort_items_alpha and group_name in item_orders:
+                # Apply config order
+                config_order = list(dict.fromkeys(item_orders.get(group_name, [])))
+                tasks_in_df = df_group['Task'].unique()
+                ordered_tasks = [task for task in config_order if task in tasks_in_df]
+                other_tasks = sorted([task for task in tasks_in_df if task not in ordered_tasks])
+                final_order = ordered_tasks + other_tasks
+                
+                if final_order:
+                    df_group['Task'] = pd.Categorical(df_group['Task'], categories=final_order, ordered=True)
+                    df_group.sort_values('Task', inplace=True)
+            else:
+                # Apply alphabetical order
+                df_group.sort_values('Task', inplace=True)
 
-        st.dataframe(
-            df_group[['Task', 'Holder', 'Time', 'Date']],
-            column_config={
-                "Task": "Task",
-                "Holder": "Record Holder(s)",
-                "Time": "Time",
-                "Date": st.column_config.DateColumn("Date Achieved", format="YYYY-MM-DD")
-            },
-            use_container_width=True, 
-            hide_index=True,
-            height=(len(df_group) + 1) * 35 + 3
-        )
-        st.markdown("---")
+            # --- Display records as cards in a responsive grid ---
+            card_html_list = [display_pb_card(row.Task, row.Holder, row.Time, row.Date) for row in df_group.itertuples()]
+            
+            # Join all card HTML into one string and wrap in the grid container
+            st.write(f'<div class="card-container">{"".join(card_html_list)}</div>', unsafe_allow_html=True)
+        
+    st.markdown("---")
 
     st.subheader("👑 Record Holder Leaderboard")
     
