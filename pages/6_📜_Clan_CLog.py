@@ -80,6 +80,16 @@ def get_image_as_base64(file_path):
 # --- Custom CSS for the responsive card grid layout ---
 st.markdown("""
 <style>
+    /*
+     VVV CHANGE THE FONT SIZE AND STYLE OF THE EXPANDER TITLE HERE VVV
+     Using 'data-testid' is a stable way to target Streamlit components.
+    */
+    div[data-testid="stExpander"] summary p {
+        font-size: 1.2rem; /* Example values: 1.2rem, 18px, 1.5em */
+        font-weight: bold;
+    }
+    /* ^^^ CHANGE THE FONT SIZE AND STYLE OF THE EXPANDER TITLE HERE ^^^ */
+
     .card-grid-container {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -133,9 +143,7 @@ st.markdown("""
 
 
 st.title("📜 Clan Collection Log")
-st.markdown("A summary of all unique items collected by the clan, combining historical and current data.")
-st.warning("The Data is currently bugged so may not read the correct number")
-st.warning("The categories are yet to be set")
+st.markdown("A summary of all unique items collected by the clan")
 
 # --- Data Loading ---
 df_clog = Streamlit_utils.load_table("collection_log_summary")
@@ -217,71 +225,70 @@ else:
              final_group_render_order = [g for g in group_order_from_config if g in selected_groups]
 
         for group_name in final_group_render_order:
-            st.subheader(group_name)
-            df_group = df_filtered[df_filtered['Group'] == group_name].copy()
-            
-            # Sort items within the group based on toggle
-            if not sort_items_alpha and group_name in item_orders:
-                item_order_list = item_orders.get(group_name, [])
-                df_group['Item_Name'] = pd.Categorical(df_group['Item_Name'], categories=item_order_list, ordered=True)
-                df_group.sort_values('Item_Name', inplace=True)
-            else:
-                df_group.sort_values('Item_Name', inplace=True)
-            
-            # --- Card Display Logic ---
-            items_in_group = df_group.to_dict('records')
-            
-            card_html_list = []
-            for item in items_in_group:
-                safe_item_name = html.escape(item['Item_Name'])
-                item_name_lower = item['Item_Name'].lower().strip()
+            # Use an expander for each group. The title style is set in the CSS above.
+            with st.expander(label=group_name, expanded=True):
+                df_group = df_filtered[df_filtered['Group'] == group_name].copy()
                 
-                # --- UPDATED ICON LOGIC ---
-                icon_html = ""
-                icon_src = ""
+                # Sort items within the group based on toggle
+                if not sort_items_alpha and group_name in item_orders:
+                    item_order_list = item_orders.get(group_name, [])
+                    df_group['Item_Name'] = pd.Categorical(df_group['Item_Name'], categories=item_order_list, ordered=True)
+                    df_group.sort_values('Item_Name', inplace=True)
+                else:
+                    df_group.sort_values('Item_Name', inplace=True)
                 
-                # 1. Try to find the custom name-based icon first
-                custom_icon_filename = re.sub(r'[^a-zA-Z0-9_]', '', item['Item_Name'].replace(' ', '_')) + ".webp"
-                custom_icon_path = os.path.join(CUSTOM_ICON_DIR, custom_icon_filename)
+                # --- Card Display Logic ---
+                items_in_group = df_group.to_dict('records')
                 
-                if os.path.exists(custom_icon_path):
-                    icon_b64 = get_image_as_base64(custom_icon_path)
-                    if icon_b64:
-                        icon_src = f"data:image/webp;base64,{icon_b64}"
-                
-                # 2. If not found, fall back to the direct icon map from items-complete.json
-                if not icon_src:
-                    icon_src = item_icon_map.get(item_name_lower)
+                card_html_list = []
+                for item in items_in_group:
+                    safe_item_name = html.escape(item['Item_Name'])
+                    item_name_lower = item['Item_Name'].lower().strip()
+                    
+                    # --- UPDATED ICON LOGIC ---
+                    icon_html = ""
+                    icon_src = ""
+                    
+                    # 1. Try to find the custom name-based icon first
+                    custom_icon_filename = re.sub(r'[^a-zA-Z0-9_]', '', item['Item_Name'].replace(' ', '_')) + ".webp"
+                    custom_icon_path = os.path.join(CUSTOM_ICON_DIR, custom_icon_filename)
+                    
+                    if os.path.exists(custom_icon_path):
+                        icon_b64 = get_image_as_base64(custom_icon_path)
+                        if icon_b64:
+                            icon_src = f"data:image/webp;base64,{icon_b64}"
+                    
+                    # 2. If not found, fall back to the direct icon map from items-complete.json
+                    if not icon_src:
+                        icon_src = item_icon_map.get(item_name_lower)
 
-                # 3. Build the final icon HTML, adding a link if a wiki URL exists.
-                if icon_src:
-                    icon_img_tag = f'<img src="{icon_src}" class="item-icon">'
-                    wiki_url = item_wiki_url_map.get(item_name_lower)
-                    if wiki_url:
-                        # Wrap the image in a clickable link
-                        icon_html = f'<a href="{html.escape(wiki_url)}" target="_blank" rel="noopener noreferrer">{icon_img_tag}</a>'
-                    else:
-                        icon_html = icon_img_tag
-                # --- End Icon Logic ---
+                    # 3. Build the final icon HTML, adding a link if a wiki URL exists.
+                    if icon_src:
+                        icon_img_tag = f'<img src="{icon_src}" class="item-icon">'
+                        wiki_url = item_wiki_url_map.get(item_name_lower)
+                        if wiki_url:
+                            # Wrap the image in a clickable link
+                            icon_html = f'<a href="{html.escape(wiki_url)}" target="_blank" rel="noopener noreferrer">{icon_img_tag}</a>'
+                        else:
+                            icon_html = icon_img_tag
+                    # --- End Icon Logic ---
+                    
+                    icon_container_html = f'<div class="icon-container">{icon_html}</div>'
+
+                    # --- Text Content ---
+                    text_container_html = (
+                        '<div class="text-container">'
+                        f'<div class="item-name">{safe_item_name}</div>'
+                        f'<div class="item-count">{item["All_Time_Count"]:,}</div>'
+                        '</div>'
+                    )
+
+                    card_html = (
+                        f'<div class="item-card">{icon_container_html}{text_container_html}</div>'
+                    )
+                    card_html_list.append(card_html)
                 
-                icon_container_html = f'<div class="icon-container">{icon_html}</div>'
-
-                # --- Text Content ---
-                text_container_html = (
-                    '<div class="text-container">'
-                    f'<div class="item-name">{safe_item_name}</div>'
-                    f'<div class="item-count">{item["All_Time_Count"]:,}</div>'
-                    '</div>'
-                )
-
-                card_html = (
-                    f'<div class="item-card">{icon_container_html}{text_container_html}</div>'
-                )
-                card_html_list.append(card_html)
-            
-            all_cards_html = "".join(card_html_list)
-            grid_html = f'<div class="card-grid-container">{all_cards_html}</div>'
-            
-            st.markdown(grid_html, unsafe_allow_html=True)
-            
-            st.markdown("---")
+                all_cards_html = "".join(card_html_list)
+                grid_html = f'<div class="card-grid-container">{all_cards_html}</div>'
+                
+                st.markdown(grid_html, unsafe_allow_html=True)
