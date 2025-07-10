@@ -271,3 +271,43 @@ quest_messages = [
     "📜 The world has been saved yet again by {player}, who completed the **'{quest_name}'** quest on {date}.",
     "📜 {player} has completed the **'{quest_name}'** quest and is ready for the next adventure."
 ]
+
+[hardcore_deaths]
+solo_death_messages = [
+    "🦘 On {date}, {player} went from 'Hardcore' to 'Hard done by'. Unlucky, mate.",
+    "🥥 {player} carked it on {date}. Bit of a coconut death if you ask me. Hollow at the core.",
+    "🎣 {player} got caught slacklining and snapped on {date}. Goodbye red helm, hello regret.",
+    "🐍 On {date}, {player} zigged when they should’ve zagged. Now they’re just a glorified Iron.",
+    "🚫 HCIM status revoked on {date}. {player} got drop-kicked by fate. Or a moss giant. Same thing.",
+    "🔥 {player} cooked it harder than a servo pie on {date}. No coming back from that one.",
+    "💤 Hardcore? More like *Hardly Cared*. {player} flopped it on {date}.",
+    "🧻 {player} wiped harder than a Woolies bog roll aisle during lockdown. {date} - we’ll never forget. But we might laugh.",
+    "🪓 On {date}, {player} logged in and promptly logged out... of Hardcore life.",
+    "🧂 {player} died with a full salt stack on {date}. At least they're seasoned now."
+]
+
+group_life_lost_messages = [
+    "🍺 On {date}, {player} tripped over their own ego. One life down, {lives} to go. Crack open a cold one, lads.",
+    "🪃 {player} chucked a boomerang play on {date} — came back and hit the whole team. {lives} left. Nice one.",
+    "🥾 Someone give {player} the boot. {date} was a write-off. Group's on {lives} lives and one bad vibe.",
+    "🧃 {player} took a juice break mid-fight on {date}. Result: -1 life. {lives} left and counting.",
+    "🪤 {player} got baited harder than a tradie with free smoko. {date} cost the team. Lives left: {lives}.",
+    "🪙 {player} flipped a coin on {date} and chose death. Not great for morale. {lives} left.",
+    "🦆 {player} waddled into danger on {date} and waddled out dead. {lives} lives remain. Barely.",
+    "🐄 Mooove over, {player}. You tanked like a dairy cow on {date}. Now the group's got {lives} left and trust issues.",
+    "🎭 {player} went method acting as a noob on {date}. Stunning performance. {lives} lives remain.",
+    "🕳️ {player} slipped into the danger hole on {date}. We yelled 'don't', they heard 'yeet'. {lives} lives left."
+]
+
+group_status_lost_messages = [
+    "🪓 {player} took an axe to team morale on {date}. Hardcore status gone. Friendship status: shaky.",
+    "🥶 {player} ice-skated through mechanics on {date} and shattered the group’s Hardcore dream. Cheers, mate.",
+    "🐑 On {date}, {player} led the group like a blind sheep off a cliff. No more Hardcore. Just hard feelings.",
+    "🦘 {player} jumped into danger like it was a billabong. On {date}, the whole team got soaked.",
+    "🐸 {player} croaked it on {date}, dragging the group with them. Hardcore status: bogged.",
+    "🥸 {player} roleplayed as dead weight and absolutely nailed it. {date} - we all suffered.",
+    "🫠 {player} folded like a deck chair in cyclone season. Hardcore mode deactivated on {date}.",
+    "💢 {player} went rogue on {date} and solo tanked the team’s hopes. Hardcore? Yeah, nah.",
+    "🛻 On {date}, {player} drove the Hardcore bus... straight into a ditch. Team status: wrecked.",
+    "🪦 The dream died with {player} on {date}. What a beautiful disaster. 10/10 would not trust again."
+]
