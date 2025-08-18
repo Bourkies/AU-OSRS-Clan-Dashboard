@@ -5,4 +5,4 @@ SQLAlchemy
 toml
 tomli
 streamlit-js-eval
-PyYAML
+Pillow
