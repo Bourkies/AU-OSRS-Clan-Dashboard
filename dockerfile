@@ -11,6 +11,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libjpeg-dev \
     zlib1g-dev \
+    gfortran \
+    libopenblas-dev \
+    liblapack-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Add this line to create the .streamlit directory and an empty secrets file
@@ -22,7 +25,7 @@ RUN mkdir -p .streamlit && touch .streamlit/secrets.toml
 COPY requirements.txt .
 
 # Install the Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --no-binary pandas -r requirements.txt
 
 # Copy the entire project directory into the container
 # This includes Home.py, pages/, .streamlit/, etc.
