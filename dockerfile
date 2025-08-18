@@ -9,8 +9,8 @@ WORKDIR /app
 # (e.g., psycopg2-binary might need some of these)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
-    libjpeg-dev \
-    zlib1g-dev \
+#    libjpeg-dev \
+#    zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Add this line to create the .streamlit directory and an empty secrets file
