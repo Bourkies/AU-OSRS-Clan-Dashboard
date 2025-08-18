@@ -1,0 +1,351 @@
+# Configuration for the OSRS Bingo Board
+# Use percentages for positioning and sizing to make it responsive.
+
+board_settings:
+  background_image: "board_pre_release_censored.png"
+
+defaults:
+  shape: "rect" # Default shape type ('rect', 'circle', etc.)
+  stroke_width: 2
+  stroke_color: "#FFFFFF00" # Semi-transparent white (70% opacity)
+  fill_color: "#00000000"   # Dark, semi-transparent fill (20% opacity)
+  rotation: 0
+  show_name_on_tile: true # Set to true to see names for easy setup
+  font_size: 14
+  font_fill: "#FFFFFF00"     # Semi-transparent white (95% opacity)
+
+# Note: Hover style is not yet supported by the canvas component directly.
+# The interactivity is handled by displaying details on the side.
+hover_style:
+  stroke_width: 4
+  stroke_color: "#FFD700" # Gold color for hover
+
+# --- Define all your bingo tiles below ---
+tiles:
+  # Easy Tiles
+  - id: "E1"
+    name: "E1 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 3.61, y_pct: 8.76 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: top
+
+  - id: "E2"
+    name: "E2 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 9.3, y_pct: 8.76 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: top
+
+  - id: "E3"
+    name: "E3 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 14.99, y_pct: 8.76 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: top
+
+  - id: "E4"
+    name: "E4 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 20.68, y_pct: 8.76 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: top
+
+  - id: "E5"
+    name: "E5 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 26.37, y_pct: 8.76 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: top
+
+  - id: "E6"
+    name: "E6 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 32.06, y_pct: 8.76 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: top
+
+  - id: "E7"
+    name: "E7 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 3.61, y_pct: 17.57 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "E8"
+    name: "E8 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 9.3, y_pct: 17.57 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "E9"
+    name: "E9 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 14.99, y_pct: 17.57 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "E10"
+    name: "E10 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 20.68, y_pct: 17.57 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "E11"
+    name: "E11 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 26.37, y_pct: 17.57 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "E12"
+    name: "E12 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 32.06, y_pct: 17.57 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  # Medium Tiles
+  - id: "M1"
+    name: "M1 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 3.61, y_pct: 34.69 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: top
+
+  - id: "M2"
+    name: "M2 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 9.3, y_pct: 34.69 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: top
+
+  - id: "M3"
+    name: "M3 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 14.99, y_pct: 34.69 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: top
+
+  - id: "M4"
+    name: "M4 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 20.68, y_pct: 34.69 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: top
+
+  - id: "M5"
+    name: "M5 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 26.37, y_pct: 34.69 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: top
+
+  - id: "M6"
+    name: "M6 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 32.06, y_pct: 34.69 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: top
+
+  - id: "M7"
+    name: "M7 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 3.61, y_pct: 43.6 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "M8"
+    name: "M8 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 9.3, y_pct: 43.6 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "M9"
+    name: "M9 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 14.99, y_pct: 43.6 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "M10"
+    name: "M10 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 20.68, y_pct: 43.6 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "M11"
+    name: "M11 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 26.37, y_pct: 43.6 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "M12"
+    name: "M12 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 32.06, y_pct: 43.6 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  # Hard Tiles
+  - id: "H1"
+    name: "H1 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 3.61, y_pct: 59.58 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "H2"
+    name: "H2 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 9.3, y_pct: 59.58 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "H3"
+    name: "H3 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 14.99, y_pct: 59.58 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "H4"
+    name: "H4 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 20.68, y_pct: 59.58 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "H5"
+    name: "H5 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 26.37, y_pct: 59.58 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "H6"
+    name: "H6 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 32.06, y_pct: 59.58 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "H7"
+    name: "H7 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 3.61, y_pct: 68.49 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: bottom
+
+  - id: "H8"
+    name: "H8 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 9.3, y_pct: 68.49 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: bottom
+
+  - id: "H9"
+    name: "H9 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 14.99, y_pct: 68.49 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: bottom
+
+  - id: "H10"
+    name: "H10 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 20.68, y_pct: 68.49 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: bottom
+
+  - id: "H11"
+    name: "H11 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 26.37, y_pct: 68.49 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: bottom
+
+  - id: "H12"
+    name: "H12 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 32.06, y_pct: 68.49 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: bottom
+
+  #insane tiles
+  - id: "I1"
+    name: "I1 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 3.61, y_pct: 83.81 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "I2"
+    name: "I2 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 13.02, y_pct: 83.81 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "I3"
+    name: "I3 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 22.79, y_pct: 83.81 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "I4"
+    name: "I4 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 31.93, y_pct: 83.81 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "I5"
+    name: "I5 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 3.61, y_pct: 92.62 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: bottom
+
+  - id: "I6"
+    name: "I6 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 13.02, y_pct: 92.62 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: bottom
+
+  - id: "I7"
+    name: "II7 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 22.79, y_pct: 92.62 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: bottom
+
+  - id: "I8"
+    name: "I8 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 31.93, y_pct: 92.62 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  # Come Back tiles
+
+  - id: "C1"
+    name: "C1 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 77.94, y_pct: 66.61 }
+    size: { width_pct: 6.24, height_pct: 9.66 }
+
+  - id: "C2"
+    name: "C2 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 89.46, y_pct: 66.61 }
+    size: { width_pct: 6.24, height_pct: 9.6 }
+
+  - id: "C3"
+    name: "C3 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 77.94, y_pct: 81.04 }
+    size: { width_pct: 6.24, height_pct: 9.6 }
+    tooltip_position: bottom
+
+  - id: "C4"
+    name: "C4 censor"
+    description: "A description of the tile and its completion requirements will be added here."
+    position: { x_pct: 89.46, y_pct: 81.04 }
+    size: { width_pct: 6.24, height_pct: 9.6 }
+    tooltip_position: bottom
+
+  # RULES
+  - id: "RULES"
+    name: "RULES"
+    description: "THE RULES WILL GO HERE SO DOING  
+      1. veryyyyyyyyyyyyyyyyyyyyyyyyyyyyyy longgggggggggggggggggggggggggg
+      2. stringfffffffffffffffffffffffffffffffffffffffffffffff
+      3. ffffffffffff ffff sdddddfsdf sdf sf sdfsdf sdf sdf sdf sdf s df sdf sdf sd f sdf sdf
+      4. sd fsdf sdf sd fsd fsd f sd sdf sdf sdf sd fsd fsd f dsfsd f"
+    position: { x_pct: 50, y_pct: 0 }
+    size: { width_pct: 50, height_pct: 30 }
