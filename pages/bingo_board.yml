@@ -2,7 +2,7 @@
 # Use percentages for positioning and sizing to make it responsive.
 
 board_settings:
-  background_image: "Board_v2_incompleate.png"
+  background_image: "board_pre_release_censored.png"
 
 defaults:
   shape: "rect" # Default shape type ('rect', 'circle', etc.)
@@ -533,4 +533,5 @@ tiles:
     name: "EMU BEER"
     description: "A sick pack of stubbies: cheaper than therapy, quicker than Centrelink."
     position: { x_pct: 40.98, y_pct: 89.84 }
+
     size: { width_pct: 9.18, height_pct: 9.06 }
