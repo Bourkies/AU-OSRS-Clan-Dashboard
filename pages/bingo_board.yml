@@ -1,0 +1,524 @@
+# Configuration for the OSRS Bingo Board
+# Use percentages for positioning and sizing to make it responsive.
+
+board_settings:
+  background_image: "Bingo_Board.png"
+
+defaults:
+  shape: "rect" # Default shape type ('rect', 'circle', etc.)
+  stroke_width: 2
+  stroke_color: "#FFFFFF00" # Semi-transparent white (70% opacity)
+  fill_color: "#00000000"   # Dark, semi-transparent fill (20% opacity)
+  rotation: 0
+  show_name_on_tile: true # Set to true to see names for easy setup
+  font_size: 14
+  font_fill: "#FFFFFF00"     # Semi-transparent white (95% opacity)
+
+# Note: Hover style is not yet supported by the canvas component directly.
+# The interactivity is handled by displaying details on the side.
+hover_style:
+  stroke_width: 4
+  stroke_color: "#FFD700" # Gold color for hover
+
+# --- Define all your bingo tiles below ---
+tiles:
+  # Row 1
+  - id: "E1"
+    name: "Obtain x5 Dragon Defenders"
+    description: "Obtain x5 Dragon Defenders"
+    position: { x_pct: 4.62, y_pct: 9.12 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+    tooltip_position: top
+
+  - id: "E2"
+    name: "Obtain x5 Abyssal Whips"
+    description: "Obtain x5 Abyssal Whips"
+    position: { x_pct: 9.28, y_pct: 9.24 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+    tooltip_position: top
+
+  - id: "E3"
+    name: "Obtain an unsired"
+    description: "Obtain an unsired"
+    position: { x_pct: 13.84, y_pct: 9.24 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+    tooltip_position: top
+
+  - id: "E4"
+    name: "Any revenant ancient artefact"
+    description: "Any revenant ancient artefact"
+    position: { x_pct: 18.47, y_pct: 9.20 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+    tooltip_position: top
+
+  - id: "E5"
+    name: "Any wilderness weapon add on"
+    description: "(Claws of callisto, fangs of venenatis or skull of vet’ion)"
+    position: { x_pct: 23.00, y_pct: 9.34 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+    tooltip_position: top
+
+  - id: "E6"
+    name: "Obtain 1 dragon pickaxe from the wilderness"
+    description: "(Venenatis/Spindle, Vetion/Calvarion, Callisto/Artio, Chaos Elemental)"
+    position: { x_pct: 27.33, y_pct: 9.01 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+    tooltip_position: top
+
+  - id: "E7"
+    name: "One pair of araena boots"
+    description: "One pair of araena boots"
+    position: { x_pct: 31.83, y_pct: 9.19 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+    tooltip_position: top
+
+  - id: "E8"
+    name: "Any of the wilderness rings"
+    description: "(Tyrannical ring, treasonous ring or ring of the gods)"
+    position: { x_pct: 36.00, y_pct: 9.03 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+    tooltip_position: top
+
+  # Row 2
+  - id: "E9"
+    name: "Obtain a sarachnis cudgel"
+    description: "Obtain a sarachnis cudgel"
+    position: { x_pct: 4.58, y_pct: 15.37 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  - id: "E10"
+    name: "Any Zulrah unique"
+    description: "(Tanzanite fang, Magic Fang, Serpentine visage, Uncut onyx, Tanzanite mutagen, Magma Mutagen, Jar of Swamp or Pet Snakeling)"
+    position: { x_pct: 9.23, y_pct: 15.34 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  - id: "E11"
+    name: "Make a twinflame staff"
+    description: "(Fire element staff crown and a ice elemental staff crown)"
+    position: { x_pct: 13.82, y_pct: 15.55 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  - id: "E12"
+    name: "Any TOA Gem"
+    description: "(eye of the corruptor, jewel of the sun, breach of the scarab, jewel of amascut)"
+    position: { x_pct: 18.34, y_pct: 15.30 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  - id: "E13"
+    name: "Obtain a Dharok great axe"
+    description: "Obtain a Dharok great axe"
+    position: { x_pct: 23.08, y_pct: 15.43 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  - id: "E14"
+    name: "Obtain an Enhanced crystal teleport seed"
+    description: "Obtain an Enhanced crystal teleport seed"
+    position: { x_pct: 27.29, y_pct: 15.58 }
+    size: { width_pct: 3.32, height_pct: 4.89 }
+
+  - id: "E15"
+    name: "Obtain a curved bone"
+    description: "Obtain a curved bone"
+    position: { x_pct: 31.92, y_pct: 15.48 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  - id: "E16"
+    name: "Obtain Sulphur blades AND Glacial temotli"
+    description: "Obtain Sulphur blades AND Glacial temotli"
+    position: { x_pct: 36.09, y_pct: 15.40 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  # Row 3
+  - id: "E17"
+    name: "Obtain a zenyte shard"
+    description: "Obtain a zenyte shard"
+    position: { x_pct: 4.58, y_pct: 21.40 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  - id: "E18"
+    name: "Obtain KBD heads"
+    description: "Obtain KBD heads"
+    position: { x_pct: 9.16, y_pct: 21.44 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  - id: "E19"
+    name: "Obtain a kraken tentacle OR a trident of the seas"
+    description: "Obtain a kraken tentacle OR a trident of the seas"
+    position: { x_pct: 13.72, y_pct: 21.47 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  - id: "E20"
+    name: "Obtain a fedora"
+    description: "Obtain a fedora"
+    position: { x_pct: 18.33, y_pct: 21.15 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  - id: "E21"
+    name: "Any GOTR dye"
+    description: "Any GOTR dye"
+    position: { x_pct: 23.14, y_pct: 21.33 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  - id: "E22"
+    name: "Farmer’s Outfit"
+    description: "(400 Tithe farm points are required in total as a team)"
+    position: { x_pct: 27.28, y_pct: 21.24 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  - id: "E23"
+    name: "Obtain a berserker ring"
+    description: "Obtain a berserker ring"
+    position: { x_pct: 31.85, y_pct: 21.18 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  - id: "E24"
+    name: "ANY jar from a boss"
+    description: "ANY jar from a boss"
+    position: { x_pct: 36.15, y_pct: 21.36 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  # Medium Tiles
+  # Row 1
+  - id: "M1"
+    name: "One Venator shard AND One Ancient icon"
+    description: "One Venator shard AND One Ancient icon"
+    position: { x_pct: 4.60, y_pct: 33.46 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+    tooltip_position: top
+
+  - id: "M2"
+    name: "All 3 cerberus crystals"
+    description: "(Primordial crystal, Pegasian crystal and Eternal crystal)"
+    position: { x_pct: 9.22, y_pct: 33.60 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+    tooltip_position: top
+
+  - id: "M3"
+    name: "One full set of mix matched barrows set"
+    description: "(Helmet slot, body slot, legs slot, weapon slot - each piece must be from a different barrows brother)"
+    position: { x_pct: 13.83, y_pct: 33.63 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+    tooltip_position: top
+
+  - id: "M4"
+    name: "Obtain an armadyl crossbow"
+    description: "Obtain an armadyl crossbow"
+    position: { x_pct: 18.42, y_pct: 33.63 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+    tooltip_position: top
+
+  - id: "M5"
+    name: "Obtain a basilisk jaw"
+    description: "Obtain a basilisk jaw"
+    position: { x_pct: 23.19, y_pct: 33.77 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+    tooltip_position: top
+
+  - id: "M6"
+    name: "Obtain an Osmumten's fang"
+    description: "Obtain an Osmumten's fang"
+    position: { x_pct: 27.34, y_pct: 33.76 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+    tooltip_position: top
+
+  - id: "M7"
+    name: "Obtain a pharaoh scepter"
+    description: "Obtain a pharaoh scepter"
+    position: { x_pct: 31.82, y_pct: 33.76 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+    tooltip_position: top
+
+  - id: "M8"
+    name: "1 mil Hunter xp as a team"
+    description: "1 mil Hunter xp as a team"
+    position: { x_pct: 36.06, y_pct: 33.46 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+    tooltip_position: top
+
+  # Row 2
+  - id: "M9"
+    name: "Either an Arcane prayer scroll OR a Dexterous prayer scroll"
+    description: "Either an Arcane prayer scroll OR a Dexterous prayer scroll"
+    position: { x_pct: 4.60, y_pct: 39.49 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  - id: "M10"
+    name: "Any Vorkath Unique"
+    description: "(Dragonbone necklace, Jar of decay, Draconic visage, Skeletal visage or Vorki pet)"
+    position: { x_pct: 9.10, y_pct: 39.35 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  - id: "M11"
+    name: "Complete a mismatched moons set"
+    description: "(Helmet slot, body slot, leg slot and weapon slot - participants may get ANY of the pieces as long as each slot is filled out)"
+    position: { x_pct: 13.77, y_pct: 39.76 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  - id: "M12"
+    name: "Either a Dragon hunter wand OR a Tome of Earth"
+    description: "Either a Dragon hunter wand OR a Tome of Earth"
+    position: { x_pct: 18.34, y_pct: 39.81 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  - id: "M13"
+    name: "Obtain a blood shard"
+    description: "Obtain a blood shard"
+    position: { x_pct: 23.27, y_pct: 39.85 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  - id: "M14"
+    name: "Obtain a crystal tool seed"
+    description: "Obtain a crystal tool seed"
+    position: { x_pct: 27.34, y_pct: 39.64 }
+    size: { width_pct: 3.32, height_pct: 5.26 }
+
+  - id: "M15"
+    name: "Obtain 5 awakeners orbs"
+    description: "Obtain 5 awakeners orbs"
+    position: { x_pct: 31.82, y_pct: 39.72 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  - id: "M16"
+    name: "1 mil Woodcutting xp as a team"
+    description: "1 mil Woodcutting xp as a team"
+    position: { x_pct: 36.12, y_pct: 39.76 }
+    size: { width_pct: 3.32, height_pct: 5.19 }
+
+  # Row 3
+  - id: "M17"
+    name: "Obtain an abyssal lantern"
+    description: "Obtain an abyssal lantern"
+    position: { x_pct: 4.60, y_pct: 45.52 }
+    size: { width_pct: 3.32, height_pct: 5.31 }
+
+  - id: "M18"
+    name: "Obtain a bottomless compost bucket"
+    description: "Obtain a bottomless compost bucket"
+    position: { x_pct: 9.10, y_pct: 45.54 }
+    size: { width_pct: 3.32, height_pct: 5.31 }
+
+  - id: "M19"
+    name: "Obtain a calcified acorn"
+    description: "(900 termites are required in total as a team)"
+    position: { x_pct: 13.77, y_pct: 45.59 }
+    size: { width_pct: 3.32, height_pct: 5.31 }
+
+  - id: "M20"
+    name: "Obtain one tormented synapse and one set of burning claws"
+    description: "(1 tormented synapse and 2 burning claw drops are required to create a full set)"
+    position: { x_pct: 18.11, y_pct: 45.57 }
+    size: { width_pct: 3.32, height_pct: 5.31 }
+
+  - id: "M21"
+    name: "Obtain the full pyromancers outfit"
+    description: "(This includes the pyromancer hood, pyromancer garb, pyromancer robe, and the pyromancer boots)"
+    position: { x_pct: 23.23, y_pct: 45.66 }
+    size: { width_pct: 3.32, height_pct: 5.31 }
+
+  - id: "M22"
+    name: "Obtain either a Tome of water OR a Big harpoon fish"
+    description: "Obtain either a Tome of water OR a Big harpoon fish"
+    position: { x_pct: 27.28, y_pct: 45.61 }
+    size: { width_pct: 3.32, height_pct: 5.31 }
+
+  - id: "M23"
+    name: "Obtain both of the wilderness shields"
+    description: "(The odium ward and the malediction ward)"
+    position: { x_pct: 31.75, y_pct: 45.59 }
+    size: { width_pct: 3.32, height_pct: 5.31 }
+
+  - id: "M24"
+    name: "1 mil Thieving xp as a team"
+    description: "1 mil Thieving xp as a team"
+    position: { x_pct: 36.12, y_pct: 45.65 }
+    size: { width_pct: 3.32, height_pct: 5.31 }
+
+  # Hard Tiles
+  - id: "H1"
+    name: "Obtain any TWO Godwars dungeon hilts"
+    description: "(NO DUPES - Armadyl hilt, Bandos hilt, Saradomin hilt, Zamorak hilt)"
+    position: { x_pct: 2.81, y_pct: 59.54 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "H2"
+    name: "Obtain a dragon warhammer"
+    description: "(YOU CAN use an alt to safe spot!)"
+    position: { x_pct: 8.56, y_pct: 59.38 }
+    size: { width_pct: 4.26, height_pct: 6.75 }
+
+  - id: "H3"
+    name: "Any piece of oathplate"
+    description: "(Oathplate helmet, Oathplate legs or Oathplate chest)"
+    position: { x_pct: 14.34, y_pct: 59.28 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "H4"
+    name: "Obtain a nightmare unique"
+    description: "(Nightmare staff, Inquisitor’s great helm, Inquisitor’s hauberk, Inquisitor’s plateskirt, Inquisitor’s mace, Eldritch orb, Harmonised orb, Volatile orb, Jar of dreams or Little nightmare pet)"
+    position: { x_pct: 20.00, y_pct: 59.35 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "H5"
+    name: "Complete a Noxious Halberd"
+    description: "(Due to dupe protection any 3 nox halberd pieces are required to count as a completion doesn't have to be 3 different ones)"
+    position: { x_pct: 25.66, y_pct: 59.41 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "H6"
+    name: "Obtain a Ring of endurance"
+    description: "Obtain a Ring of endurance"
+    position: { x_pct: 31.32, y_pct: 59.37 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "H7"
+    name: "Obtain a fortis colosseum unique"
+    description: "(Echo crystal, Sunfire fanatic helm, Sunfire fanatic cuirass, Sunfire fanatic chausses, Tonalztics of ralos, Uncut onyx, Pet Smol heredit - QUIVER DOES NOT COUNT AS A UNIQUE)"
+    position: { x_pct: 37.01, y_pct: 59.32 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "H8"
+    name: "Complete a full voidwaker"
+    description: "Complete a full voidwaker"
+    position: { x_pct: 2.81, y_pct: 68.49 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: bottom
+
+  - id: "H9"
+    name: "Obtain any wilderness weapon"
+    description: "(Craw’s bow, Thammoran’s sceptre or a Viggora’s chainmace)"
+    position: { x_pct: 8.70, y_pct: 68.47 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: bottom
+
+  - id: "H10"
+    name: "Obtain a Doom of Mokhaiotl unique"
+    description: "(Avernic Treads, Eye of ayak, Mokhaiotl Cloth or Pet Dom)"
+    position: { x_pct: 14.42, y_pct: 68.51 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: bottom
+
+  - id: "H11"
+    name: "Complete a set of bandos"
+    description: "(bandos chestplate, bandos tassets and bandos boots)"
+    position: { x_pct: 19.97, y_pct: 68.43 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: bottom
+
+  - id: "H12"
+    name: "Obtain a kit from Challenge mode COX OR Hardmode TOB"
+    description: "(Twisted ancestral kit OR Holy ornament kit OR sanguine ornament kit)"
+    position: { x_pct: 25.69, y_pct: 68.41 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: bottom
+
+  - id: "H13"
+    name: "Obtain a Hydra claw OR a Hydra leather"
+    description: "Obtain a Hydra claw OR a Hydra leather"
+    position: { x_pct: 31.41, y_pct: 68.39 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: bottom
+  
+  - id: "H14"
+    name: "Obtain a Nex Unique"
+    description: "(Zaryte vambraces, Nihil horn, Torva full helm [d], Torva platebody [d], Torva platelegs [d], Ancient Hilt, Nexling pet)"
+    position: { x_pct: 37.09, y_pct: 68.36 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: bottom
+
+  #insane tiles
+  - id: "I1"
+    name: "Any two megarares"
+    description: "(Tumeken’s Shadow, Twisted Bow, Scythe of vitur - DUPES ARE ALLOWED)"
+    position: { x_pct: 4.09, y_pct: 83.83 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "I2"
+    name: "A raid armour piece from each raid"
+    description: "(One armour piece from TOB, COX and TOA - you CAN get all three leg slots for example as long as they are from the 3 different raids)"
+    position: { x_pct: 14.53, y_pct: 83.79 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "I3"
+    name: "Any mutagen from Zulrah"
+    description: "(Tanzanite mutagen OR Magma Mutagen)"
+    position: { x_pct: 25.63, y_pct: 83.58 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "I4"
+    name: "Corporal beast unique"
+    description: "(Spectral sigil, Arcane sigil, Elysian sigil, Jar of Spirits, Pet dark core)"
+    position: { x_pct: 35.08, y_pct: 83.44 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  - id: "I5"
+    name: "Obtain a Metamorphic dust OR Sanguine dust"
+    description: "Obtain a Metamorphic dust OR Sanguine dust"
+    position: { x_pct: 4.03, y_pct: 92.62 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: bottom
+
+  - id: "I6"
+    name: "Obtain an Enhanced crystal weapon seed"
+    description: "Obtain an Enhanced crystal weapon seed"
+    position: { x_pct: 14.53, y_pct: 92.63 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: bottom
+
+  - id: "I7"
+    name: "Obtain full virtus"
+    description: "(Virtus mask, Vistus robe top and virtus robe bottoms)"
+    position: { x_pct: 25.63, y_pct: 92.59 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+    tooltip_position: bottom
+
+  - id: "I8"
+    name: "Build a soul reaper axe from scratch"
+    description: "(As a team you require Leviathan’s lure, Siren’s staff, Executioner’s axe head and the Eye of duke)"
+    position: { x_pct: 35.07, y_pct: 92.32 }
+    size: { width_pct: 4.26, height_pct: 6.76 }
+
+  # Come Back tiles
+  - id: "C1"
+    name: "Alch your infernal cape"
+    description: "Alch your infernal cape on discord stream where an bingo mod is watching"
+    position: { x_pct: 77.87, y_pct: 66.78 }
+    size: { width_pct: 7.34, height_pct: 8.98 }
+
+  - id: "C2"
+    name: "Obtain either an imbued heart or an eternal gem"
+    description: "Obtain either an imbued heart or an eternal gem"
+    position: { x_pct: 89.31, y_pct: 67.00 }
+    size: { width_pct: 7.34, height_pct: 8.98 }
+
+  - id: "C3"
+    name: "Obtain ANY pet"
+    description: "(Ineligible pets: Pet chaos elemental, Chompy Chick, Skotos, Tzrek-jad, Jal-nib-rek, Smol Heredit, Yami though the contract of familiar acquisition)"
+    position: { x_pct: 77.97, y_pct: 81.32 }
+    size: { width_pct: 7.15, height_pct: 8.83 }
+    tooltip_position: bottom
+
+  - id: "C4"
+    name: "Obtain 3rd age"
+    description: "Obtain 3rd age"
+    position: { x_pct: 89.53, y_pct: 81.97 }
+    size: { width_pct: 7.15, height_pct: 8.83 }
+    tooltip_position: bottom
+
+  # Easter eggs
+  - id: "T1"
+    name: "Speedo Abbott"
+    description: "you're fkn cooked kev, I'll smash ya harder than a box of Export on a Friday night."
+    position: { x_pct: 74.05, y_pct: 27.81 }
+    size: { width_pct: 5.19, height_pct: 9.54 }
+
+  - id: "T2"
+    name: "Kev 07"
+    description: "I'll say sorry again Abbott... sorry you're about to get flogged after I neck this fkn stubby!"
+    position: { x_pct: 42.35, y_pct: 57.19 }
+    size: { width_pct: 4.70, height_pct: 9.39 }
+
+  - id: "T3"
+    name: "EMU BEER"
+    description: "A sick pack of stubbies: cheaper than therapy, quicker than Centrelink."
+    position: { x_pct: 40.98, y_pct: 89.84 }
+    size: { width_pct: 9.18, height_pct: 9.06 }
